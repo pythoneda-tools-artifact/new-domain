@@ -21,9 +21,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from dbus_next import BusType, Message
 from pythoneda.tools.artifact.new_domain.events import (
+    DefinitionRepositoryCreated,
+    DefinitionRepositoryRequested,
+    DomainRepositoryCreated,
+    DomainRepositoryGitattributesCreated,
+    DomainRepositoryGitattributesRequested,
+    DomainRepositoryGitignoreCreated,
+    DomainRepositoryGitignoreRequested,
+    DomainRepositoryReadmeCreated,
+    DomainRepositoryReadmeRequested,
+    DomainRepositoryRequested,
+    NewDomainCreated,
     NewDomainRequested,
 )
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import (
+    DbusDefinitionRepositoryCreated,
+    DbusDefinitionRepositoryRequested,
+    DbusDomainRepositoryCreated,
+    DbusDomainRepositoryGitattributesCreated,
+    DbusDomainRepositoryGitattributesRequested,
+    DbusDomainRepositoryGitignoreCreated,
+    DbusDomainRepositoryGitignoreRequested,
+    DbusDomainRepositoryReadmeCreated,
+    DbusDomainRepositoryReadmeRequested,
+    DbusDomainRepositoryRequested,
+    DbusNewDomainCreated,
     DbusNewDomainRequested,
 )
 from pythoneda.shared.infrastructure.dbus import DbusSignalListener
@@ -43,7 +65,7 @@ class NewDomainDbusSignalListener(DbusSignalListener):
 
     Collaborators:
         - pythoneda.shared.application.PythonEDA: Receives relevant domain events.
-        - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainRequested
+        - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.*
     """
 
     def __init__(self):
@@ -61,6 +83,28 @@ class NewDomainDbusSignalListener(DbusSignalListener):
         :rtype: Dict
         """
         result = {}
+        key = self.__class__.full_class_name(DefinitionRepositoryCreated)
+        result[key] = [DbusDefinitionRepositoryCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DefinitionRepositoryRequested)
+        result[key] = [DbusDefinitionRepositoryRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryCreated)
+        result[key] = [DbusDomainRepositoryCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryGitattributesCreated)
+        result[key] = [DbusDomainRepositoryGitattributesCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryGitattributesRequested)
+        result[key] = [DbusDomainRepositoryGitattributesRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryGitignoreCreated)
+        result[key] = [DbusDomainRepositoryGitignoreCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryGitignoreRequested)
+        result[key] = [DbusDomainRepositoryGitignoreRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryReadmeCreated)
+        result[key] = [DbusDomainRepositoryReadmeCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryReadmeRequested)
+        result[key] = [DbusDomainRepositoryReadmeRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryRequested)
+        result[key] = [DbusDomainRepositoryRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(NewDomainCreated)
+        result[key] = [DbusNewDomainCreated, BusType.SYSTEM]
         key = self.__class__.full_class_name(NewDomainRequested)
         result[key] = [DbusNewDomainRequested, BusType.SYSTEM]
         return result

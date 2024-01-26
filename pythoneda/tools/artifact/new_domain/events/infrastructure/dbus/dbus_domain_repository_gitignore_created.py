@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_new_domain_requested.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_domain_repository_gitignore_created.py
 
-This file defines the DbusNewDomainRequested class.
+This file defines the DbusDomainRepositoryGitignoreCreated class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -23,19 +23,21 @@ from dbus_next import Message
 from dbus_next.service import ServiceInterface, signal
 import json
 from pythoneda.shared import BaseObject
-from pythoneda.tools.artifact.new_domain.events import NewDomainRequested
+from pythoneda.tools.artifact.new_domain.events import (
+    DomainRepositoryGitignoreCreated,
+)
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
 
-class DbusNewDomainRequested(BaseObject, ServiceInterface):
+class DbusDomainRepositoryGitignoreCreated(BaseObject, ServiceInterface):
     """
-    D-Bus interface for NewDomainRequested.
+    D-Bus interface for DomainRepositoryGitignoreCreated.
 
-    Class name: DbusNewDomainRequested
+    Class name: DbusDomainRepositoryGitignoreCreated
 
     Responsibilities:
-        - Define the d-bus interface for the NewDomainRequested event.
+        - Define the d-bus interface for the DomainRepositoryGitignoreCreated event.
 
     Collaborators:
         - None
@@ -43,26 +45,20 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
 
     def __init__(self):
         """
-        Creates a new DbusNewDomainRequested.
+        Creates a new DbusDomainRepositoryGitignoreCreated.
         """
-        super().__init__("Pythoneda_Tools_Artifact_NewDomain_Events_NewDomainRequested")
+        super().__init__(
+            "Pythoneda_Tools_Artifact_DomainRepositoryGitignore_Events_DomainRepositoryGitignoreCreated"
+        )
 
     @signal()
-    def NewDomainRequested(
-        self, org: "s", name: "s", package: "s", githubToken: "s", gpgKeyId: "s"
-    ):
+    def DomainRepositoryGitignoreCreated(self, url: "s", defUrl: "s"):
         """
-        Defines the NewDomainRequested d-bus signal.
-        :param org: The name of the organization.
-        :type org: str
-        :param name: The domain name.
-        :type name: str
-        :param package: The Python package.
-        :type package: str
-        :param githubToken: The github token.
-        :type githubToken: str
-        :param gpgKeyId: The GnuPG key id.
-        :type gpgKeyId: str
+        Defines the DomainRepositoryGitignoreCreated d-bus signal.
+        :param url: The url of the new domain.
+        :type url: str
+        :param defUrl: The url of the domain repository.
+        :type defUrl: str
         """
         pass
 
@@ -76,59 +72,45 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
         return DBUS_PATH
 
     @classmethod
-    def transform(cls, event: NewDomainRequested) -> List[str]:
+    def transform(cls, event: DomainRepositoryGitignoreCreated) -> List[str]:
         """
         Transforms given event to signal parameters.
         :param event: The event to transform.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitignoreCreated
         :return: The event information.
         :rtype: List[str]
         """
         return [
-            event.org,
-            event.name,
-            event.package,
-            event.github_token,
-            event.gpg_key_id,
+            event.url,
+            event.def_url,
             event.id,
             json.dumps(event.previous_event_ids),
         ]
 
     @classmethod
-    def sign(cls, event: NewDomainRequested) -> str:
+    def sign(cls, event: DomainRepositoryGitignoreCreated) -> str:
         """
         Retrieves the signature for the parameters of given event.
         :param event: The domain event.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitignoreCreated
         :return: The signature.
         :rtype: str
         """
-        return "sssss"
+        return "ssss"
 
     @classmethod
-    def parse(cls, message: Message) -> NewDomainRequested:
+    def parse(cls, message: Message) -> DomainRepositoryGitignoreCreated:
         """
-        Parses given d-bus message containing a NewDomainRequested event.
+        Parses given d-bus message containing a DomainRepositoryGitignoreCreated event.
         :param message: The message.
         :type message: dbus_next.Message
-        :return: The NewDomainRequested event.
-        :rtype: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :return: The DomainRepositoryGitignoreCreated event.
+        :rtype: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitignoreCreated
         """
-        (
-            org,
-            name,
-            package,
-            github_token,
-            gpg_key_id,
-            event_id,
-            prev_event_ids,
-        ) = message.body
-        return NewDomainRequested(
-            org,
-            name,
-            package,
-            github_token,
-            gpg_key_id,
+        url, def_url, event_id, prev_event_ids = message.body
+        return DomainRepositoryGitignoreCreated(
+            url,
+            def_url,
             None,
             event_id,
             json.loads(prev_event_ids),

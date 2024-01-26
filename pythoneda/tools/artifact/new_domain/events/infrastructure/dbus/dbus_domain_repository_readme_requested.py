@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_new_domain_requested.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_domain_repository_readme_requested.py
 
-This file defines the DbusNewDomainRequested class.
+This file defines the DbusDomainRepositoryReadmeRequested class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -23,19 +23,21 @@ from dbus_next import Message
 from dbus_next.service import ServiceInterface, signal
 import json
 from pythoneda.shared import BaseObject
-from pythoneda.tools.artifact.new_domain.events import NewDomainRequested
+from pythoneda.tools.artifact.new_domain.events import (
+    DomainRepositoryReadmeRequested,
+)
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
 
-class DbusNewDomainRequested(BaseObject, ServiceInterface):
+class DbusDomainRepositoryReadmeRequested(BaseObject, ServiceInterface):
     """
-    D-Bus interface for NewDomainRequested.
+    D-Bus interface for DomainRepositoryReadmeRequested.
 
-    Class name: DbusNewDomainRequested
+    Class name: DbusDomainRepositoryReadmeRequested
 
     Responsibilities:
-        - Define the d-bus interface for the NewDomainRequested event.
+        - Define the d-bus interface for the DomainRepositoryReadmeRequested event.
 
     Collaborators:
         - None
@@ -43,16 +45,18 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
 
     def __init__(self):
         """
-        Creates a new DbusNewDomainRequested.
+        Creates a new DbusDomainRepositoryReadmeRequested.
         """
-        super().__init__("Pythoneda_Tools_Artifact_NewDomain_Events_NewDomainRequested")
+        super().__init__(
+            "Pythoneda_Tools_Artifact_DomainRepositoryReadme_Events_DomainRepositoryReadmeRequested"
+        )
 
     @signal()
-    def NewDomainRequested(
+    def DomainRepositoryReadmeRequested(
         self, org: "s", name: "s", package: "s", githubToken: "s", gpgKeyId: "s"
     ):
         """
-        Defines the NewDomainRequested d-bus signal.
+        Defines the DomainRepositoryReadmeRequested d-bus signal.
         :param org: The name of the organization.
         :type org: str
         :param name: The domain name.
@@ -76,11 +80,11 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
         return DBUS_PATH
 
     @classmethod
-    def transform(cls, event: NewDomainRequested) -> List[str]:
+    def transform(cls, event: DomainRepositoryReadmeRequested) -> List[str]:
         """
         Transforms given event to signal parameters.
         :param event: The event to transform.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryReadmeRequested
         :return: The event information.
         :rtype: List[str]
         """
@@ -95,24 +99,24 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
         ]
 
     @classmethod
-    def sign(cls, event: NewDomainRequested) -> str:
+    def sign(cls, event: DomainRepositoryReadmeRequested) -> str:
         """
         Retrieves the signature for the parameters of given event.
         :param event: The domain event.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryReadmeRequested
         :return: The signature.
         :rtype: str
         """
         return "sssss"
 
     @classmethod
-    def parse(cls, message: Message) -> NewDomainRequested:
+    def parse(cls, message: Message) -> DomainRepositoryReadmeRequested:
         """
-        Parses given d-bus message containing a NewDomainRequested event.
+        Parses given d-bus message containing a DomainRepositoryReadmeRequested event.
         :param message: The message.
         :type message: dbus_next.Message
-        :return: The NewDomainRequested event.
-        :rtype: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
+        :return: The DomainRepositoryReadmeRequested event.
+        :rtype: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryReadmeRequested
         """
         (
             org,
@@ -123,7 +127,7 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
             event_id,
             prev_event_ids,
         ) = message.body
-        return NewDomainRequested(
+        return DomainRepositoryReadmeRequested(
             org,
             name,
             package,

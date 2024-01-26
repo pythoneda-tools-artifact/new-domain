@@ -19,11 +19,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from pythoneda.shared import Event
+from .new_domain_event import NewDomainEvent
 from typing import List
 
 
-class NewDomainRequested(Event):
+class NewDomainRequested(NewDomainEvent):
     """
     Represents someone has requested a domain to be created.
 
@@ -38,7 +38,9 @@ class NewDomainRequested(Event):
 
     def __init__(
         self,
-        namespace: str,
+        org: str,
+        name: str,
+        package: str,
         githubToken: str,
         gpgKeyId: str,
         previousEventId: str = None,
@@ -47,8 +49,12 @@ class NewDomainRequested(Event):
     ):
         """
         Creates a new NewDomainRequested instance.
-        :param namespace: The Python namespace.
-        :type namespace: str
+        :param org: The name of the organization.
+        :type org: str
+        :param name: The name of the domain.
+        :type name: str
+        :param package: The Python package.
+        :type package: str
         :param githubToken: The github token.
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
@@ -61,42 +67,19 @@ class NewDomainRequested(Event):
         is being reconstructed.
         :type reconstructedPreviousEventIds: List[str]
         """
-        previous_events = None
-        if previousEventId:
-            previous_events = [previousEventId]
         super().__init__(
-            previous_events, reconstructedId, reconstructedPreviousEventIds
+            org,
+            name,
+            package,
+            githubToken,
+            gpgKeyId,
+            None,
+            None,
+            None,
+            previousEventId,
+            reconstructedId,
+            reconstructedPreviousEventIds,
         )
-        self._namespace = namespace
-        self._github_token = githubToken
-        self._gpg_key_id = gpgKeyId
-
-    @property
-    def namespace(self) -> str:
-        """
-        Retrieves the Python namespace.
-        :return: Such namespace.
-        :rtype: str
-        """
-        return self._namespace
-
-    @property
-    def github_token(self) -> str:
-        """
-        Retrieves the github token.
-        :return: Such token.
-        :rtype: str
-        """
-        return self._github_token
-
-    @property
-    def gpg_key_id(self) -> str:
-        """
-        Retrieves the id of the GnuPG key.
-        :return: Such id.
-        :rtype: str
-        """
-        return self._gpg_key_id
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

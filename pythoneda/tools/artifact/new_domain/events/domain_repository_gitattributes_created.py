@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/shared/runtime/events/lifecycle/new_domain_created.py
+pythoneda/shared/runtime/events/lifecycle/domain_repository_gitattributes_created.py
 
-This script defines the NewDomainCreated class.
+This script defines the DomainRepositoryGitattributesCreated class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -23,14 +23,14 @@ from .new_domain_event import NewDomainEvent
 from typing import List
 
 
-class NewDomainCreated(NewDomainEvent):
+class DomainRepositoryGitattributesCreated(NewDomainEvent):
     """
-    Represents a new domain has been created.
+    Represents the .gitattributes file has been created on a domain repository.
 
-    Class name: NewDomainCreated
+    Class name: DomainRepositoryGitattributesCreated
 
     Responsibilities:
-        - Represent the fact that a new domain has been created.
+        - Represent the fact that the .gitattributes file has been created.
 
     Collaborators:
         - None
@@ -43,12 +43,15 @@ class NewDomainCreated(NewDomainEvent):
         package: str,
         githubToken: str,
         gpgKeyId: str,
+        defOrg: str,
+        url: str,
+        defUrl: str,
         previousEventId: str = None,
         reconstructedId: str = None,
         reconstructedPreviousEventIds: List[str] = None,
     ):
         """
-        Creates a new NewDomainCreated instance.
+        Creates a new DomainRepositoryGitattributesCreated instance.
         :param org: The name of the organization of the domain repository.
         :type org: str
         :param name: The name of the domain.
@@ -59,9 +62,11 @@ class NewDomainCreated(NewDomainEvent):
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
-        :param url: The url of the new domain.
+        :param defOrg: The name of the organization of the definition repository.
+        :param defOrg: str
+        :param url: The url of the domain repository.
         :type url: str
-        :param defUrl: The url of the definition repository of the new domain.
+        :param defUrl: The url of the definition repository.
         :type defUrl: str
         :param previousEventId: The id of the previous event, if any.
         :type previousEventId: str
@@ -77,9 +82,9 @@ class NewDomainCreated(NewDomainEvent):
             package,
             githubToken,
             gpgKeyId,
-            None,
-            None,
-            None,
+            defOrg,
+            url,
+            defUrl,
             previous_events,
             reconstructedId,
             reconstructedPreviousEventIds,

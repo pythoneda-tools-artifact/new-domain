@@ -74,23 +74,37 @@ class NewDomainOptionsCli(CliHandler, PrimaryPort):
         :type parser: argparse.ArgumentParser
         """
         parser.add_argument(
+            "-o",
+            "--org",
+            required=True,
+            help="The name of the Github organization",
+        )
+
+        parser.add_argument(
             "-n",
-            "--namespace",
-            required=False,
-            help="The Python namespace",
+            "--name",
+            required=True,
+            help="The name of the domain",
+        )
+
+        parser.add_argument(
+            "-p",
+            "--package",
+            required=True,
+            help="The Python package",
         )
 
         parser.add_argument(
             "-t",
             "--github-token",
-            required=False,
+            required=True,
             help="The github token",
         )
 
         parser.add_argument(
             "-g",
             "--gpg-key-id",
-            required=False,
+            required=True,
             help="The GnuPG key id",
         )
 
@@ -104,7 +118,9 @@ class NewDomainOptionsCli(CliHandler, PrimaryPort):
         """
         await app.accept_options(
             {
-                "namespace": args.namespace,
+                "org": args.org,
+                "name": args.name,
+                "package": args.package,
                 "github-token": args.github_token,
                 "gpg-key-id": args.gpg_key_id,
             }

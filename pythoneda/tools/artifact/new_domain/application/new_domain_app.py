@@ -21,12 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import asyncio
 from pythoneda.shared.application import enable, PythonEDA
+from pythoneda.tools.artifact.new_domain.events import NewDomainRequested
 from pythoneda.tools.artifact.new_domain.infrastructure.cli import (
     NewDomainOptionsCli,
 )
-from pythoneda.tools.artifact.infrastructure.new_domain.dbus import (
+from pythoneda.tools.artifact.new_domain.infrastructure.dbus import (
     NewDomainDbusSignalEmitter,
 )
+from typing import Dict
 
 
 @enable(NewDomainOptionsCli)
@@ -59,6 +61,22 @@ class NewDomainApp(PythonEDA):
 
         super().__init__(banner, __file__)
         self.accept_one_shot(True)
+
+    async def accept_options(self, options: Dict):
+        """
+        Receives the options for creating a new domain.
+        :param options: The options.
+        :type options: Dict
+        """
+        new_domain_requested = NewDomainRequested(
+            options.get("org", None),
+            options.get("name", None),
+            options.get("package", None),
+            options.get("github-token", None),
+            options.get("gpg-key-id", None),
+        )
+        if new_domain_requested:
+            await self.accept(new_domain_requested)
 
 
 if __name__ == "__main__":
