@@ -88,6 +88,13 @@ class NewDomainOptionsCli(CliHandler, PrimaryPort):
         )
 
         parser.add_argument(
+            "-d",
+            "--description",
+            required=True,
+            help="A brief description of the domain",
+        )
+
+        parser.add_argument(
             "-p",
             "--package",
             required=True,
@@ -120,6 +127,7 @@ class NewDomainOptionsCli(CliHandler, PrimaryPort):
             {
                 "org": args.org,
                 "name": args.name,
+                "description": args.description,
                 "package": args.package,
                 "github-token": args.github_token,
                 "gpg-key-id": args.gpg_key_id,

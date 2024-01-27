@@ -71,6 +71,7 @@ class NewDomainApp(PythonEDA):
         new_domain_requested = NewDomainRequested(
             options.get("org", None),
             options.get("name", None),
+            options.get("description", None),
             options.get("package", None),
             options.get("github-token", None),
             options.get("gpg-key-id", None),

@@ -40,6 +40,7 @@ class DefinitionRepositoryRequested(NewDomainEvent):
         self,
         org: str,
         name: str,
+        description: str,
         package: str,
         githubToken: str,
         gpgKeyId: str,
@@ -56,6 +57,8 @@ class DefinitionRepositoryRequested(NewDomainEvent):
         :type org: str
         :param name: The name of the domain.
         :type name: str
+        :param description: A brief description of the domain.
+        :type description: str
         :param package: The Python package.
         :type package: str
         :param githubToken: The github token.
@@ -79,6 +82,7 @@ class DefinitionRepositoryRequested(NewDomainEvent):
         super().__init__(
             org,
             name,
+            description,
             package,
             githubToken,
             gpgKeyId,

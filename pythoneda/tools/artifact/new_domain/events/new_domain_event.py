@@ -40,6 +40,7 @@ class NewDomainEvent(Event):
         self,
         org: str,
         name: str,
+        description: str,
         package: str,
         githubToken: str,
         gpgKeyId: str,
@@ -56,6 +57,8 @@ class NewDomainEvent(Event):
         :type org: str
         :param name: The name of the domain.
         :type name: str
+        :param description: A brief description of the domain.
+        :type description: str
         :param package: The Python package.
         :type package: str
         :param githubToken: The github token.
@@ -84,6 +87,7 @@ class NewDomainEvent(Event):
         )
         self._org = org
         self._name = name
+        self._description = description
         self._package = package
         self._github_token = githubToken
         self._gpg_key_id = gpgKeyId
@@ -110,6 +114,16 @@ class NewDomainEvent(Event):
         :rtype: str
         """
         return self._name
+
+    @property
+    @attribute
+    def description(self) -> str:
+        """
+        Retrieves the description of the domain.
+        :return: Such information.
+        :rtype: str
+        """
+        return self._description
 
     @property
     @attribute

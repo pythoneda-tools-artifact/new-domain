@@ -40,6 +40,7 @@ class NewDomainCreated(NewDomainEvent):
         self,
         org: str,
         name: str,
+        description: str,
         package: str,
         githubToken: str,
         gpgKeyId: str,
@@ -53,6 +54,8 @@ class NewDomainCreated(NewDomainEvent):
         :type org: str
         :param name: The name of the domain.
         :type name: str
+        :param description: A brief description of the domain.
+        :type description: str
         :param package: The Python package.
         :type package: str
         :param githubToken: The github token.
@@ -74,6 +77,7 @@ class NewDomainCreated(NewDomainEvent):
         super().__init__(
             org,
             name,
+            description,
             package,
             githubToken,
             gpgKeyId,

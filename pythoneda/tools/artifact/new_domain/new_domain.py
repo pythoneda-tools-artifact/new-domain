@@ -36,6 +36,7 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainCreated,
     NewDomainRequested,
 )
+from .readme import Readme
 from typing import List
 
 
@@ -93,6 +94,7 @@ class NewDomain(EventListener):
         return DomainRepositoryRequested(
             event.org,
             event.name,
+            event.description,
             event.package,
             event.github_token,
             event.gpg_key_id,
@@ -132,6 +134,7 @@ class NewDomain(EventListener):
             DomainRepositoryCreated(
                 event.org,
                 event.name,
+                event.description,
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
@@ -142,6 +145,7 @@ class NewDomain(EventListener):
             DefinitionRepositoryRequested(
                 event.org,
                 event.name,
+                event.description,
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
@@ -169,6 +173,7 @@ class NewDomain(EventListener):
         return DefinitionRepositoryCreated(
             event.org,
             event.name,
+            event.description,
             event.package,
             event.github_token,
             event.gpg_key_id,
@@ -194,6 +199,7 @@ class NewDomain(EventListener):
             DomainRepositoryReadmeRequested(
                 event.org,
                 event.name,
+                event.description,
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
@@ -204,6 +210,7 @@ class NewDomain(EventListener):
             DomainRepositoryGitattributesRequested(
                 event.org,
                 event.name,
+                event.description,
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
@@ -214,6 +221,7 @@ class NewDomain(EventListener):
             DomainRepositoryGitignoreRequested(
                 event.org,
                 event.name,
+                event.description,
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
@@ -237,6 +245,16 @@ class NewDomain(EventListener):
         """
         # TODO
         print(f"TODO: create README in domain repository")
+        readme = Readme(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.def_org,
+            event.url,
+            event.def_url,
+        )
+        readme.generate("/tmp")
 
     @classmethod
     @listen(DomainRepositoryGitattributesRequested)
