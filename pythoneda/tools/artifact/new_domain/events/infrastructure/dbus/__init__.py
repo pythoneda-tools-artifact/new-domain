@@ -23,8 +23,10 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
 DBUS_PATH = "/pythoneda/tools/artifact/new_domain"
 
+from .dbus_new_domain_event import DbusNewDomainEvent
 from .dbus_definition_repository_created import DbusDefinitionRepositoryCreated
 from .dbus_definition_repository_requested import DbusDefinitionRepositoryRequested
+from .dbus_domain_repository_changes_pushed import DbusDomainRepositoryChangesPushed
 from .dbus_domain_repository_created import DbusDomainRepositoryCreated
 from .dbus_domain_repository_gitattributes_created import (
     DbusDomainRepositoryGitattributesCreated,

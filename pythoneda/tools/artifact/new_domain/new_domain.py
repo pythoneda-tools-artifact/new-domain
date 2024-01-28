@@ -35,6 +35,7 @@ from pythoneda.shared.git.github import Repository
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryCreated,
     DefinitionRepositoryRequested,
+    DomainRepositoryChangesPushed,
     DomainRepositoryCreated,
     DomainRepositoryGitattributesCreated,
     DomainRepositoryGitattributesRequested,
@@ -47,6 +48,8 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainRequested,
 )
 from .readme import Readme
+from .gitattributes import Gitattributes
+from .gitignore import Gitignore
 import shutil
 import tempfile
 from typing import List
@@ -97,14 +100,15 @@ class NewDomain(EventListener):
         :return: The event representing the new domain has been created, or None if the process failed.
         :rtype: pythoneda.tools.artifact.new_domain.events.NewDomainCreated
         """
-        print(
-            f"new_domain_requested: {event} ({event.github_token.get()}) [{type(event.github_token)}]"
-        )
         def_org = cls.definition_repository_org_for(event.org)
+        artifact_org = cls.artifact_repository_org_for(event.org)
         event.context["def-org"] = def_org
+        event.context["artifact-org"] = artifact_org
         event.context["url"] = f"https://github.com/{event.org}/{event.name}"
         event.context["def-url"] = f"https://github.com/{def_org}/{event.name}"
-        print(f"context -> {event.context}")
+        event.context[
+            "artifact-url"
+        ] = f"https://github.com/{artifact_org}/{event.name}"
         return DomainRepositoryRequested(
             event.org,
             event.name,
@@ -127,6 +131,17 @@ class NewDomain(EventListener):
         return f"{org}-def"
 
     @classmethod
+    def artifact_repository_org_for(cls, org: str) -> str:
+        """
+        Retrieves the github organization for the artifact repository associated to the organization of the domain repository given.
+        :param org: The organization of the domain repository.
+        :type org: str
+        :return: The organization of the artifact repository.
+        :rtype: str
+        """
+        return f"{org}-artifact"
+
+    @classmethod
     @listen(DomainRepositoryRequested)
     async def listen_DomainRepositoryRequested(
         cls, event: DomainRepositoryRequested
@@ -138,10 +153,8 @@ class NewDomain(EventListener):
         :return: The event representing the new domain has been created, or None if the process failed.
         :rtype: pythoneda.tools.artifact.new_domain.events.NewDomainCreated
         """
-        print(f"domain_repository_requested: {event} ({event.github_token.get()})")
         r = Repository(event.github_token)
         response = await r.create(event.org, event.name)
-        print(response)
         return [
             DomainRepositoryCreated(
                 event.org,
@@ -175,7 +188,6 @@ class NewDomain(EventListener):
         :return: The event representing the new domain has been created, or None if the process failed.
         :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryCreated
         """
-        print(f"definition_repository_requested: {event} ({event.github_token})")
         r = Repository(event.github_token)
         response = await r.create(event.org, event.name)
         return DefinitionRepositoryCreated(
@@ -260,8 +272,15 @@ class NewDomain(EventListener):
         repo_folder = event.context["repo-folder"]
         readme_file = readme.generate(repo_folder)
         GitAdd(repo_folder).add(readme_file)
-        GitCommit(repo_folder).commit("Added README file", False)
-        GitPush(repo_folder).push_branch("main", "origin")
+        return DomainRepositoryReadmeCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
 
     @classmethod
     @listen(DomainRepositoryGitattributesRequested)
@@ -275,8 +294,23 @@ class NewDomain(EventListener):
         :return: The event representing the .gitattributes file has been created.
         :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryGitattributesCreated
         """
-        # TODO
-        print(f"TODO: create .gitatttributes in domain repository")
+        gitattributes = Gitattributes(
+            event.context["def-url"],
+            event.context["artifact-url"],
+        )
+        print(f'def-url: {event.context["def-url"]} -> {gitattributes}')
+        repo_folder = event.context["repo-folder"]
+        gitattributes_file = gitattributes.generate(repo_folder)
+        GitAdd(repo_folder).add(gitattributes_file)
+        return DomainRepositoryGitattributesCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
 
     @classmethod
     @listen(DomainRepositoryGitignoreRequested)
@@ -290,8 +324,44 @@ class NewDomain(EventListener):
         :return: The event representing the .gitignore file has been created.
         :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryGitignoreCreated
         """
-        # TODO
-        print(f"TODO: create .gitignore in domain repository")
+        gitignore = Gitignore()
+        repo_folder = event.context["repo-folder"]
+        gitignore_file = gitignore.generate(repo_folder)
+        GitAdd(repo_folder).add(gitignore_file)
+        return DomainRepositoryGitignoreCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DomainRepositoryGitignoreCreated)
+    async def listen_DomainRepositoryGitignoreCreated(
+        cls, event: DomainRepositoryGitignoreCreated
+    ) -> DomainRepositoryChangesPushed:
+        """
+        Pushes the changes in the domain repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DomainRepositoryGitignoreCreated
+        :return: The event representing the changes have been pushe.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryChangesPushed
+        """
+        repo_folder = event.context["repo-folder"]
+        GitCommit(repo_folder).commit("Initial commit", False)
+        GitPush(repo_folder).push_branch("main", "origin")
+        return DomainRepositoryChangesPushed(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
 
 
 def cleanup_temp_dir(folder: str):

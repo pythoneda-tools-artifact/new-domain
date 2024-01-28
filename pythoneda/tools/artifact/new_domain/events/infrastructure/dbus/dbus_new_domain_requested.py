@@ -19,16 +19,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from dbus_next import Message
-from dbus_next.service import ServiceInterface, signal
-import json
-from pythoneda.shared import BaseObject
+from .dbus_new_domain_event import DbusNewDomainEvent
+from dbus_next.service import signal
 from pythoneda.tools.artifact.new_domain.events import NewDomainRequested
-from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
-from typing import List
 
 
-class DbusNewDomainRequested(BaseObject, ServiceInterface):
+class DbusNewDomainRequested(DbusNewDomainEvent):
     """
     D-Bus interface for NewDomainRequested.
 
@@ -38,101 +34,53 @@ class DbusNewDomainRequested(BaseObject, ServiceInterface):
         - Define the d-bus interface for the NewDomainRequested event.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
     """
 
     def __init__(self):
         """
         Creates a new DbusNewDomainRequested.
         """
-        super().__init__("Pythoneda_Tools_Artifact_NewDomain_Events_NewDomainRequested")
+        super().__init__()
 
     @signal()
     def NewDomainRequested(
-        self, org: "s", name: "s", package: "s", githubToken: "s", gpgKeyId: "s"
+        self,
+        org: "s",
+        name: "s",
+        description: "s",
+        package: "s",
+        githubToken: "s",
+        gpgKeyId: "s",
+        context: "s",
     ):
         """
-        Defines the NewDomainRequested d-bus signal.
-        :param org: The name of the organization.
+        Defines the DefinitionRepositoryCreated d-bus signal.
+        :param org: The name of the organization of the domain repository.
         :type org: str
-        :param name: The domain name.
+        :param name: The name of the domain.
         :type name: str
+        :param description: A brief description of the domain.
+        :type description: str
         :param package: The Python package.
         :type package: str
         :param githubToken: The github token.
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         """
         pass
 
     @classmethod
-    def path(cls) -> str:
+    def event_class(cls):
         """
-        Retrieves the d-bus path.
-        :return: Such value.
-        :rtype: str
+        Retrieves the specific event class.
+        :return: Such class.
+        :rtype: type(pythoneda.tools.artifact.new_domain.NewDomainRequested)
         """
-        return DBUS_PATH
-
-    @classmethod
-    def transform(cls, event: NewDomainRequested) -> List[str]:
-        """
-        Transforms given event to signal parameters.
-        :param event: The event to transform.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
-        :return: The event information.
-        :rtype: List[str]
-        """
-        return [
-            event.org,
-            event.name,
-            event.package,
-            event.github_token,
-            event.gpg_key_id,
-            event.id,
-            json.dumps(event.previous_event_ids),
-        ]
-
-    @classmethod
-    def sign(cls, event: NewDomainRequested) -> str:
-        """
-        Retrieves the signature for the parameters of given event.
-        :param event: The domain event.
-        :type event: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
-        :return: The signature.
-        :rtype: str
-        """
-        return "sssss"
-
-    @classmethod
-    def parse(cls, message: Message) -> NewDomainRequested:
-        """
-        Parses given d-bus message containing a NewDomainRequested event.
-        :param message: The message.
-        :type message: dbus_next.Message
-        :return: The NewDomainRequested event.
-        :rtype: pythoneda.shared.runtime.events.lifecycle.NewDomainRequested
-        """
-        (
-            org,
-            name,
-            package,
-            github_token,
-            gpg_key_id,
-            event_id,
-            prev_event_ids,
-        ) = message.body
-        return NewDomainRequested(
-            org,
-            name,
-            package,
-            github_token,
-            gpg_key_id,
-            None,
-            event_id,
-            json.loads(prev_event_ids),
-        )
+        return NewDomainRequested
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

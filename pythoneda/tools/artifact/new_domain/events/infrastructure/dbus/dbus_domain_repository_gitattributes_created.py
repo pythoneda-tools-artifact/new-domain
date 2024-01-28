@@ -19,18 +19,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from dbus_next import Message
-from dbus_next.service import ServiceInterface, signal
-import json
-from pythoneda.shared import BaseObject
+from .dbus_new_domain_event import DbusNewDomainEvent
+from dbus_next.service import signal
 from pythoneda.tools.artifact.new_domain.events import (
     DomainRepositoryGitattributesCreated,
 )
-from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
-from typing import List
 
 
-class DbusDomainRepositoryGitattributesCreated(BaseObject, ServiceInterface):
+class DbusDomainRepositoryGitattributesCreated(DbusNewDomainEvent):
     """
     D-Bus interface for DomainRepositoryGitattributesCreated.
 
@@ -40,81 +36,53 @@ class DbusDomainRepositoryGitattributesCreated(BaseObject, ServiceInterface):
         - Define the d-bus interface for the DomainRepositoryGitattributesCreated event.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
     """
 
     def __init__(self):
         """
         Creates a new DbusDomainRepositoryGitattributesCreated.
         """
-        super().__init__(
-            "Pythoneda_Tools_Artifact_DomainRepositoryGitattributes_Events_DomainRepositoryGitattributesCreated"
-        )
+        super().__init__()
 
     @signal()
-    def DomainRepositoryGitattributesCreated(self, url: "s", defUrl: "s"):
+    def DomainRepositoryGitattributesCreated(
+        self,
+        org: "s",
+        name: "s",
+        description: "s",
+        package: "s",
+        githubToken: "s",
+        gpgKeyId: "s",
+        context: "s",
+    ):
         """
-        Defines the DomainRepositoryGitattributesCreated d-bus signal.
-        :param url: The url of the new domain.
-        :type url: str
-        :param defUrl: The url of the domain repository.
-        :type defUrl: str
+        Defines the DefinitionRepositoryCreated d-bus signal.
+        :param org: The name of the organization of the domain repository.
+        :type org: str
+        :param name: The name of the domain.
+        :type name: str
+        :param description: A brief description of the domain.
+        :type description: str
+        :param package: The Python package.
+        :type package: str
+        :param githubToken: The github token.
+        :type githubToken: str
+        :param gpgKeyId: The GnuPG key id.
+        :type gpgKeyId: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         """
         pass
 
     @classmethod
-    def path(cls) -> str:
+    def event_class(cls):
         """
-        Retrieves the d-bus path.
-        :return: Such value.
-        :rtype: str
+        Retrieves the specific event class.
+        :return: Such class.
+        :rtype: type(pythoneda.tools.artifact.new_domain.DomainRepositoryGitattributesCreated)
         """
-        return DBUS_PATH
-
-    @classmethod
-    def transform(cls, event: DomainRepositoryGitattributesCreated) -> List[str]:
-        """
-        Transforms given event to signal parameters.
-        :param event: The event to transform.
-        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitattributesCreated
-        :return: The event information.
-        :rtype: List[str]
-        """
-        return [
-            event.url,
-            event.def_url,
-            event.id,
-            json.dumps(event.previous_event_ids),
-        ]
-
-    @classmethod
-    def sign(cls, event: DomainRepositoryGitattributesCreated) -> str:
-        """
-        Retrieves the signature for the parameters of given event.
-        :param event: The domain event.
-        :type event: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitattributesCreated
-        :return: The signature.
-        :rtype: str
-        """
-        return "ssss"
-
-    @classmethod
-    def parse(cls, message: Message) -> DomainRepositoryGitattributesCreated:
-        """
-        Parses given d-bus message containing a DomainRepositoryGitattributesCreated event.
-        :param message: The message.
-        :type message: dbus_next.Message
-        :return: The DomainRepositoryGitattributesCreated event.
-        :rtype: pythoneda.shared.runtime.events.lifecycle.DomainRepositoryGitattributesCreated
-        """
-        url, def_url, event_id, prev_event_ids = message.body
-        return DomainRepositoryGitattributesCreated(
-            url,
-            def_url,
-            None,
-            event_id,
-            json.loads(prev_event_ids),
-        )
+        return DomainRepositoryGitattributesCreated
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

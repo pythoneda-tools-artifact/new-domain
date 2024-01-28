@@ -82,7 +82,7 @@ class NewDomainCreated(NewDomainEvent):
             githubToken,
             gpgKeyId,
             {},
-            previous_events,
+            previousEventId,
             reconstructedId,
             reconstructedPreviousEventIds,
         )

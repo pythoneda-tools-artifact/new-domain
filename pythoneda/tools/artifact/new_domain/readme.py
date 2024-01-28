@@ -4,7 +4,7 @@ pythoneda/tools/artifact/new_domain/readme.py
 
 This file defines the Readme class.
 
-Copyright (C) 2023-today rydnr's pythoneda-tools-artifact/new-domain
+Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,29 +19,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import asyncio
-import os
-from pathlib import Path
-from pythoneda.shared import attribute, Entity
-from pythoneda.tools.artifact.new_domain.events import (
-    DefinitionRepositoryCreated,
-    DefinitionRepositoryRequested,
-    DomainRepositoryCreated,
-    DomainRepositoryGitattributesCreated,
-    DomainRepositoryGitattributesRequested,
-    DomainRepositoryGitignoreCreated,
-    DomainRepositoryGitignoreRequested,
-    DomainRepositoryRequested,
-    DomainRepositoryReadmeCreated,
-    DomainRepositoryReadmeRequested,
-    NewDomainCreated,
-    NewDomainRequested,
-)
-from stringtemplate3 import PathGroupLoader, StringTemplateGroup
-from typing import List
+from .new_file_from_template import NewFileFromTemplate
+from pythoneda.shared import attribute
 
 
-class Readme(Entity):
+class Readme(NewFileFromTemplate):
     """
     Represents a README file.
 
@@ -52,7 +34,7 @@ class Readme(Entity):
         - Know how to create a new README from templates.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.NewFileFromTemplate
     """
 
     def __init__(
@@ -67,7 +49,7 @@ class Readme(Entity):
         templateSubfolder: str = "pythoneda",
     ):
         """
-        Creates a new README instance.
+        Creates a new Readme instance.
         :param org: The name of the organization.
         :type org: str
         :param name: The repository name.
@@ -85,15 +67,18 @@ class Readme(Entity):
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
-        super().__init__()
-        self._org = org
-        self._name = name
-        self._description = description
-        self._package = package
-        self._def_org = defOrg
-        self._url = url
-        self._def_url = defUrl
-        self._template_subfolder = templateSubfolder
+        super().__init__(
+            {
+                "org": org,
+                "name": name,
+                "description": description,
+                "package": package,
+                "def-org": defOrg,
+                "url": url,
+                "def-url": defUrl,
+            },
+            templateSubfolder,
+        )
 
     @property
     @attribute
@@ -103,7 +88,7 @@ class Readme(Entity):
         :return: Such information.
         :rtype: str
         """
-        return self._org
+        return self.vars["org"]
 
     @property
     @attribute
@@ -113,7 +98,7 @@ class Readme(Entity):
         :return: Such information.
         :rtype: str
         """
-        return self._name
+        return self.vars["name"]
 
     @property
     @attribute
@@ -123,7 +108,7 @@ class Readme(Entity):
         :return: Such information.
         :rtype: str
         """
-        return self._description
+        return self.vars["description"]
 
     @property
     @attribute
@@ -133,7 +118,7 @@ class Readme(Entity):
         :return: Such package.
         :rtype: str
         """
-        return self._package
+        return self.vars["package"]
 
     @property
     @attribute
@@ -143,7 +128,7 @@ class Readme(Entity):
         :return: Such name.
         :rtype: str
         """
-        return self._def_org
+        return self.vars["def-org"]
 
     @property
     @attribute
@@ -153,7 +138,7 @@ class Readme(Entity):
         :return: Such url.
         :rtype: str
         """
-        return self._url
+        return self.vars["url"]
 
     @property
     @attribute
@@ -163,99 +148,23 @@ class Readme(Entity):
         :return: Such url.
         :rtype: str
         """
-        return self._def_url
+        return self.vars["def-url"]
 
-    @property
-    @attribute
-    def template_subfolder(self) -> str:
+    def template_name(self) -> str:
         """
-        Retrieves the template subfolder, if any.
-        :return: Such subfolder.
+        Retrieves the name of the stg file to use.
+        :return: Such information.
         :rtype: str
         """
-        return self._template_subfolder
+        return "readme"
 
-    def parent_folder(self, path: str) -> str:
+    def output_file(self) -> str:
         """
-        Retrieves the parent folder of given path.
-        :param path: The path.
-        :type path: str
-        :return: The parent folder.
+        Retrieves the name of the output file to generate.
+        :return: Such information.
         :rtype: str
         """
-        return os.path.dirname(path)
-
-    def templates_folder(self) -> str:
-        """
-        Retrieves the templates folder.
-        :return: Such location.
-        :rtype: str
-        """
-        return (
-            Path(
-                self.parent_folder(
-                    self.parent_folder(
-                        self.parent_folder(
-                            self.parent_folder(self.parent_folder(__file__))
-                        )
-                    )
-                )
-            )
-            / "templates"
-        )
-
-    def generate(self, outputFolder: str) -> str:
-        """
-        Generates the file from a template.
-        :param outputFolder: The output folder.
-        :type outputFolder: str
-        :return: The generated README file.
-        :rtype: str
-        """
-        self.process_template(
-            outputFolder,
-            "readme",
-            Path(self.templates_folder()) / self.template_subfolder,
-            "root",
-            "README.md",
-        )
-        return Path(outputFolder) / "README.md"
-
-    def process_template(
-        self,
-        outputFolder: str,
-        groupName: str,
-        templateFolder: str,
-        rootTemplate: str,
-        outputFileName: str,
-    ):
-        """
-        Processes a template.
-        :param outputFolder: The output folder.
-        :type outputFolder: str
-        :param groupName: The name of the stringtemplate group.
-        :type groupName: str
-        :param templateFolder: The subfolder with the templates.
-        :type templateFolder: str
-        :param rootTemplate: The root template.
-        :type rootTemplate: str
-        :param outputFileName: The name of the generated file.
-        :type outputFileName: str
-        """
-        # Manually read the .stg file
-        with open(
-            Path(templateFolder) / f"{groupName}.stg", "r", encoding="utf-8"
-        ) as f:
-            # Create a group from the string content
-            group = StringTemplateGroup(
-                name=groupName, file=f, rootDir=str(templateFolder)
-            )
-
-            root_template = group.getInstanceOf("root")
-            root_template["readme"] = self
-
-        with open(Path(outputFolder) / outputFileName, "w") as output_file:
-            output_file.write(str(root_template))
+        return "README.md"
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

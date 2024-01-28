@@ -24,6 +24,7 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 from .new_domain_event import NewDomainEvent
 from .definition_repository_created import DefinitionRepositoryCreated
 from .definition_repository_requested import DefinitionRepositoryRequested
+from .domain_repository_changes_pushed import DomainRepositoryChangesPushed
 from .domain_repository_created import DomainRepositoryCreated
 from .domain_repository_gitattributes_created import (
     DomainRepositoryGitattributesCreated,

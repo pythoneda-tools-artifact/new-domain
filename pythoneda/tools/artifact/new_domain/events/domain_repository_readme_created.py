@@ -81,7 +81,7 @@ class DomainRepositoryReadmeCreated(NewDomainEvent):
             githubToken,
             gpgKeyId,
             context,
-            previous_events,
+            previousEventId,
             reconstructedId,
             reconstructedPreviousEventIds,
         )

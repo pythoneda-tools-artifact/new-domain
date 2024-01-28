@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_domain_repository_gitattributes_requested.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_domain_repository_changes_pushed.py
 
-This file defines the DbusDomainRepositoryGitattributesRequested class.
+This file defines the DbusDomainRepositoryChangesPushed class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -21,19 +21,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .dbus_new_domain_event import DbusNewDomainEvent
 from dbus_next.service import signal
-from pythoneda.tools.artifact.new_domain.events import (
-    DomainRepositoryGitattributesRequested,
-)
+from pythoneda.tools.artifact.new_domain.events import DomainRepositoryChangesPushed
 
 
-class DbusDomainRepositoryGitattributesRequested(DbusNewDomainEvent):
+class DbusDomainRepositoryChangesPushed(DbusNewDomainEvent):
     """
-    D-Bus interface for DomainRepositoryGitattributesRequested.
+    D-Bus interface for DomainRepositoryChangesPushed.
 
-    Class name: DbusDomainRepositoryGitattributesRequested
+    Class name: DbusDomainRepositoryChangesPushed
 
     Responsibilities:
-        - Define the d-bus interface for the DomainRepositoryGitattributesRequested event.
+        - Define the d-bus interface for the DomainRepositoryChangesPushed event.
 
     Collaborators:
         - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
@@ -41,12 +39,12 @@ class DbusDomainRepositoryGitattributesRequested(DbusNewDomainEvent):
 
     def __init__(self):
         """
-        Creates a new DbusDomainRepositoryGitattributesRequested.
+        Creates a new DbusDomainRepositoryChangesPushed.
         """
         super().__init__()
 
     @signal()
-    def DomainRepositoryGitattributesRequested(
+    def DomainRepositoryChangesPushed(
         self,
         org: "s",
         name: "s",
@@ -80,9 +78,9 @@ class DbusDomainRepositoryGitattributesRequested(DbusNewDomainEvent):
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.DomainRepositoryGitattributesRequested)
+        :rtype: type(pythoneda.tools.artifact.new_domain.DomainRepositoryChangesPushed)
         """
-        return DomainRepositoryGitattributesRequested
+        return DomainRepositoryChangesPushed
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et
