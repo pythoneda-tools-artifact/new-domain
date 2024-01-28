@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .new_domain_event import NewDomainEvent
 from pythoneda.shared import attribute, sensitive
-from typing import List
+from typing import Dict, List
 
 
 class DefinitionRepositoryCreated(NewDomainEvent):
@@ -45,9 +45,7 @@ class DefinitionRepositoryCreated(NewDomainEvent):
         package: str,
         githubToken: str,
         gpgKeyId: str,
-        defOrg: str,
-        url: str,
-        defUrl: str,
+        context: Dict = None,
         previousEventId: str = None,
         reconstructedId: str = None,
         reconstructedPreviousEventIds: List[str] = None,
@@ -66,12 +64,8 @@ class DefinitionRepositoryCreated(NewDomainEvent):
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
-        :param defOrg: The name of the organization of the definition repository.
-        :param defOrg: str
-        :param url: The url of the domain repository.
-        :type url: str
-        :param defUrl: The url of the definition repository.
-        :type defUrl: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         :param previousEventId: The id of the previous event, if any.
         :type previousEventId: str
         :param reconstructedId: The id of the event, if it's generated externally.
@@ -87,9 +81,7 @@ class DefinitionRepositoryCreated(NewDomainEvent):
             package,
             githubToken,
             gpgKeyId,
-            defOrg,
-            url,
-            defUrl,
+            context,
             previousEventId,
             reconstructedId,
             reconstructedPreviousEventIds,

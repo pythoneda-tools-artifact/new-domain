@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .new_domain_event import NewDomainEvent
-from typing import List
+from typing import Dict, List
 
 
 class NewDomainRequested(NewDomainEvent):
@@ -44,6 +44,7 @@ class NewDomainRequested(NewDomainEvent):
         package: str,
         githubToken: str,
         gpgKeyId: str,
+        context: Dict = None,
         previousEventId: str = None,
         reconstructedId: str = None,
         reconstructedPreviousEventIds: List[str] = None,
@@ -62,6 +63,8 @@ class NewDomainRequested(NewDomainEvent):
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         :param previousEventId: The id of the previous event, if any.
         :type previousEventId: str
         :param reconstructedId: The id of the event, if it's generated externally.
@@ -77,9 +80,7 @@ class NewDomainRequested(NewDomainEvent):
             package,
             githubToken,
             gpgKeyId,
-            None,
-            None,
-            None,
+            context,
             previousEventId,
             reconstructedId,
             reconstructedPreviousEventIds,

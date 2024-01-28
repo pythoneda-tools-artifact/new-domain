@@ -20,7 +20,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import asyncio
+import atexit
+import os
 from pythoneda.shared import EventListener, listen
+from pythoneda.shared.git import (
+    GitAdd,
+    GitBranch,
+    GitClone,
+    GitCommit,
+    GitPush,
+    GitRemote,
+)
 from pythoneda.shared.git.github import Repository
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryCreated,
@@ -37,6 +47,8 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainRequested,
 )
 from .readme import Readme
+import shutil
+import tempfile
 from typing import List
 
 
@@ -89,8 +101,10 @@ class NewDomain(EventListener):
             f"new_domain_requested: {event} ({event.github_token.get()}) [{type(event.github_token)}]"
         )
         def_org = cls.definition_repository_org_for(event.org)
-        url = f"https://github.com/{event.org}/{event.name}"
-        def_url = f"https://github.com/{def_org}/{event.name}"
+        event.context["def-org"] = def_org
+        event.context["url"] = f"https://github.com/{event.org}/{event.name}"
+        event.context["def-url"] = f"https://github.com/{def_org}/{event.name}"
+        print(f"context -> {event.context}")
         return DomainRepositoryRequested(
             event.org,
             event.name,
@@ -98,9 +112,7 @@ class NewDomain(EventListener):
             event.package,
             event.github_token,
             event.gpg_key_id,
-            def_org,
-            url,
-            def_url,
+            event.context,
         )
 
     @classmethod
@@ -138,9 +150,7 @@ class NewDomain(EventListener):
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
-                event.def_org,
-                event.url,
-                event.def_url,
+                event.context,
             ),
             DefinitionRepositoryRequested(
                 event.org,
@@ -149,9 +159,7 @@ class NewDomain(EventListener):
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
-                event.def_org,
-                event.url,
-                event.def_url,
+                event.context,
             ),
         ]
 
@@ -177,9 +185,7 @@ class NewDomain(EventListener):
             event.package,
             event.github_token,
             event.gpg_key_id,
-            event.def_org,
-            event.url,
-            event.def_url,
+            event.context,
         )
 
     @classmethod
@@ -194,7 +200,12 @@ class NewDomain(EventListener):
         :return: Events requesting the creation of some files in given repository.
         :rtype: List[pythoneda.tools.artifact.new_domain.events.*]
         """
-        print(f"received domain_repository_created")
+        temp_dir = tempfile.mkdtemp()
+        atexit.register(lambda: cleanup_temp_dir(temp_dir))
+        repo = GitClone(temp_dir).clone(event.context["url"])
+        repo_folder = os.path.join(temp_dir, event.name)
+        GitBranch(repo_folder).branch("main")
+        event.context["repo-folder"] = repo_folder
         return [
             DomainRepositoryReadmeRequested(
                 event.org,
@@ -203,9 +214,7 @@ class NewDomain(EventListener):
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
-                event.def_org,
-                event.url,
-                event.def_url,
+                event.context,
             ),
             DomainRepositoryGitattributesRequested(
                 event.org,
@@ -214,9 +223,7 @@ class NewDomain(EventListener):
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
-                event.def_org,
-                event.url,
-                event.def_url,
+                event.context,
             ),
             DomainRepositoryGitignoreRequested(
                 event.org,
@@ -225,9 +232,7 @@ class NewDomain(EventListener):
                 event.package,
                 event.github_token,
                 event.gpg_key_id,
-                event.def_org,
-                event.url,
-                event.def_url,
+                event.context,
             ),
         ]
 
@@ -243,18 +248,20 @@ class NewDomain(EventListener):
         :return: The event representing the README file has been created.
         :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryReadmeCreated
         """
-        # TODO
-        print(f"TODO: create README in domain repository")
         readme = Readme(
             event.org,
             event.name,
             event.description,
             event.package,
-            event.def_org,
-            event.url,
-            event.def_url,
+            event.context["def-org"],
+            event.context["url"],
+            event.context["def-url"],
         )
-        readme.generate("/tmp")
+        repo_folder = event.context["repo-folder"]
+        readme_file = readme.generate(repo_folder)
+        GitAdd(repo_folder).add(readme_file)
+        GitCommit(repo_folder).commit("Added README file", False)
+        GitPush(repo_folder).push_branch("main", "origin")
 
     @classmethod
     @listen(DomainRepositoryGitattributesRequested)
@@ -285,6 +292,15 @@ class NewDomain(EventListener):
         """
         # TODO
         print(f"TODO: create .gitignore in domain repository")
+
+
+def cleanup_temp_dir(folder: str):
+    """
+    Exit hook to delete given folder.
+    :param folder: The folder to delete.
+    :type folder: str
+    """
+    shutil.rmtree(folder)
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

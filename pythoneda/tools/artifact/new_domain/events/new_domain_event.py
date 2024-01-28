@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from pythoneda.shared import attribute, Event, sensitive
-from typing import List
+from typing import Dict, List
 
 
 class NewDomainEvent(Event):
@@ -44,9 +44,7 @@ class NewDomainEvent(Event):
         package: str,
         githubToken: str,
         gpgKeyId: str,
-        defOrg: str = None,
-        url: str = None,
-        defUrl: str = None,
+        context: Dict = None,
         previousEventId: str = None,
         reconstructedId: str = None,
         reconstructedPreviousEventIds: List[str] = None,
@@ -65,12 +63,8 @@ class NewDomainEvent(Event):
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
-        :param defOrg: The name of the organization of the definition repository.
-        :param defOrg: str
-        :param url: The url of the domain repository.
-        :type url: str
-        :param defUrl: The url of the definition repository.
-        :type defUrl: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         :param previousEventId: The id of the previous event, if any.
         :type previousEventId: str
         :param reconstructedId: The id of the event, if it's generated externally.
@@ -91,9 +85,10 @@ class NewDomainEvent(Event):
         self._package = package
         self._github_token = githubToken
         self._gpg_key_id = gpgKeyId
-        self._def_org = defOrg
-        self._url = url
-        self._def_url = defUrl
+        if context:
+            self._context = context
+        else:
+            self._context = {}
 
     @property
     @attribute
@@ -157,6 +152,15 @@ class NewDomainEvent(Event):
         return self._package
 
     @property
+    def context(self) -> Dict:
+        """
+        Retrieves a dictionary with additional values.
+        :return: Such dictionary.
+        :rtype: Dict
+        """
+        return self._context
+
+    @property
     @attribute
     def def_org(self) -> str:
         """
@@ -164,7 +168,7 @@ class NewDomainEvent(Event):
         :return: Such name.
         :rtype: str
         """
-        return self._def_org
+        return self.context.get("def-org", None)
 
     @property
     @attribute
@@ -174,7 +178,7 @@ class NewDomainEvent(Event):
         :return: Such url.
         :rtype: str
         """
-        return self._url
+        return self.context.get("url", None)
 
     @property
     @attribute
@@ -184,7 +188,27 @@ class NewDomainEvent(Event):
         :return: Such url.
         :rtype: str
         """
-        return self._def_url
+        return self.context.get("def-url", None)
+
+    @property
+    @attribute
+    def repo_folder(self) -> str:
+        """
+        Retrieves the folder of the cloned domain repository.
+        :return: Such folder.
+        :rtype: str
+        """
+        return self.context.get("repo-folder", None)
+
+    @property
+    @attribute
+    def def_repo_folder(self) -> str:
+        """
+        Retrieves the folder of the cloned definition repository.
+        :return: Such folder.
+        :rtype: str
+        """
+        return self.context.get("def-repo-folder", None)
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

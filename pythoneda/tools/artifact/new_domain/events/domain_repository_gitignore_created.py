@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .new_domain_event import NewDomainEvent
-from typing import List
+from typing import Dict, List
 
 
 class DomainRepositoryGitignoreCreated(NewDomainEvent):
@@ -44,9 +44,7 @@ class DomainRepositoryGitignoreCreated(NewDomainEvent):
         package: str,
         githubToken: str,
         gpgKeyId: str,
-        defOrg: str,
-        url: str,
-        defUrl: str,
+        context: Dict = None,
         previousEventId: str = None,
         reconstructedId: str = None,
         reconstructedPreviousEventIds: List[str] = None,
@@ -63,12 +61,8 @@ class DomainRepositoryGitignoreCreated(NewDomainEvent):
         :type package: str
         :param githubToken: The github token.
         :type githubToken: str
-        :param gpgKeyId: The GnuPG key id.
-        :type gpgKeyId: str
-        :param defOrg: The name of the organization of the definition repository.
-        :param defOrg: str
-        :param url: The url of the domain repository.
-        :type url: str
+        :param context: A dictionary with additional values.
+        :param context: Dict
         :param defUrl: The url of the definition repository.
         :type defUrl: str
         :param previousEventId: The id of the previous event, if any.
@@ -86,9 +80,7 @@ class DomainRepositoryGitignoreCreated(NewDomainEvent):
             package,
             githubToken,
             gpgKeyId,
-            defOrg,
-            url,
-            defUrl,
+            context,
             previous_events,
             reconstructedId,
             reconstructedPreviousEventIds,

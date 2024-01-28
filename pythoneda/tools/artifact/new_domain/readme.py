@@ -204,11 +204,13 @@ class Readme(Entity):
             / "templates"
         )
 
-    def generate(self, outputFolder: str):
+    def generate(self, outputFolder: str) -> str:
         """
         Generates the file from a template.
         :param outputFolder: The output folder.
         :type outputFolder: str
+        :return: The generated README file.
+        :rtype: str
         """
         self.process_template(
             outputFolder,
@@ -217,6 +219,7 @@ class Readme(Entity):
             "root",
             "README.md",
         )
+        return Path(outputFolder) / "README.md"
 
     def process_template(
         self,
@@ -250,9 +253,6 @@ class Readme(Entity):
 
             root_template = group.getInstanceOf("root")
             root_template["readme"] = self
-
-        with open(Path("/tmp/debug") / outputFileName, "w") as output_file:
-            output_file.write(str(root_template))
 
         with open(Path(outputFolder) / outputFileName, "w") as output_file:
             output_file.write(str(root_template))
