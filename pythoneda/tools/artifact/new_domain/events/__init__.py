@@ -22,7 +22,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
 from .new_domain_event import NewDomainEvent
+from .definition_repository_changes_pushed import DefinitionRepositoryChangesPushed
 from .definition_repository_created import DefinitionRepositoryCreated
+from .definition_repository_nix_flake_created import DefinitionRepositoryNixFlakeCreated
+from .definition_repository_nix_flake_requested import (
+    DefinitionRepositoryNixFlakeRequested,
+)
+from .definition_repository_pyprojecttoml_template_created import (
+    DefinitionRepositoryPyprojecttomlTemplateCreated,
+)
+from .definition_repository_pyprojecttoml_template_requested import (
+    DefinitionRepositoryPyprojecttomlTemplateRequested,
+)
+from .definition_repository_readme_created import DefinitionRepositoryReadmeCreated
+from .definition_repository_readme_requested import DefinitionRepositoryReadmeRequested
 from .definition_repository_requested import DefinitionRepositoryRequested
 from .domain_repository_changes_pushed import DomainRepositoryChangesPushed
 from .domain_repository_created import DomainRepositoryCreated

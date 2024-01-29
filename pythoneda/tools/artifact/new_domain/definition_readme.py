@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/gitattributes.py
+pythoneda/tools/artifact/new_domain/definition_readme.py
 
-This file defines the Gitattributes class.
+This file defines the Readme class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -19,70 +19,67 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from .new_file_from_template import NewFileFromTemplate
-from pythoneda.shared import attribute
+from .readme import Readme
 
 
-class Gitattributes(NewFileFromTemplate):
+class DefinitionReadme(Readme):
     """
-    Represents a .gitattributes file.
+    Represents the README file in the definition repository.
 
-    Class name: Gitattributes
+    Class name: DefinitionReadme
 
     Responsibilities:
-        - Model a .gitattributes file.
-        - Know how to create a new .gitattributes from templates.
+        - Model a README file.
+        - Know how to create a new README from templates.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.NewFileFromTemplate
     """
 
     def __init__(
         self,
+        org: str,
+        name: str,
+        description: str,
+        package: str,
+        defOrg: str,
+        url: str,
         defUrl: str,
-        artifactUrl: str = None,
         templateSubfolder: str = "pythoneda",
     ):
         """
-        Creates a new Gitattributes instance.
+        Creates a new DefinitionReadme instance.
+        :param org: The name of the organization.
+        :type org: str
+        :param name: The repository name.
+        :type name: str
+        :param description: The repository description.
+        :type description: str
+        :param package: The Python package.
+        :type package: str
+        :param defOrg: The name of the organization of the definition repository.
+        :type defOrg: str
+        :param url: The url of the repository.
+        :type url: str
         :param defUrl: The url of the definition repository.
         :type defUrl: str
-        :param artifactUrl: The url of the artifact repository.
-        :type artifactUrl: str
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
         super().__init__(
-            {
-                "def-url": defUrl,
-                "artifact-url": artifactUrl,
-            },
-            "gitattributes",
-            "Gitattributes",
-            ".gitattributes",
+            org,
+            name,
+            description,
+            package,
+            defOrg,
+            url,
+            defUrl,
+            "definition_readme",
+            "DefinitionReadme",
+            "README.md",
             "root",
             templateSubfolder,
         )
-
-    @property
-    @attribute
-    def def_url(self) -> str:
-        """
-        Retrieves the url of the definition repository.
-        :return: Such information.
-        :rtype: str
-        """
-        return self.vars["def-url"]
-
-    @property
-    @attribute
-    def artifact_url(self) -> str:
-        """
-        Retrieves the url of the artifact repository.
-        :return: Such information.
-        :rtype: str
-        """
-        return self.vars["artifact-url"]
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

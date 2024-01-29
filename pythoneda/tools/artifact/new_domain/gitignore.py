@@ -44,24 +44,12 @@ class Gitignore(NewFileFromTemplate):
         """
         super().__init__(
             {},
+            "gitignore",
+            "Gitignore",
+            ".gitignore",
+            "root",
             templateSubfolder,
         )
-
-    def template_name(self) -> str:
-        """
-        Retrieves the name of the stg file to use.
-        :return: Such information.
-        :rtype: str
-        """
-        return "gitignore"
-
-    def output_file(self) -> str:
-        """
-        Retrieves the name of the output file to generate.
-        :return: Such information.
-        :rtype: str
-        """
-        return ".gitignore"
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

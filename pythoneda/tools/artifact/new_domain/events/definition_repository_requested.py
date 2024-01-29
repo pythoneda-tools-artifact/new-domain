@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/shared/runtime/events/lifecycle/definition_repository_requested.py
+pythoneda/tools/artifact/new_domain/events/definition_repository_requested.py
 
 This script defines the DefinitionRepositoryRequested class.
 

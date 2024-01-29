@@ -21,8 +21,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from dbus_next import BusType
 from pythoneda.tools.artifact.new_domain.events import (
+    DefinitionRepositoryChangesPushed,
     DefinitionRepositoryCreated,
+    DefinitionRepositoryNixFlakeCreated,
+    DefinitionRepositoryNixFlakeRequested,
+    DefinitionRepositoryPyprojecttomlTemplateCreated,
+    DefinitionRepositoryPyprojecttomlTemplateRequested,
+    DefinitionRepositoryReadmeCreated,
+    DefinitionRepositoryReadmeRequested,
     DefinitionRepositoryRequested,
+    DomainRepositoryChangesPushed,
     DomainRepositoryCreated,
     DomainRepositoryGitattributesCreated,
     DomainRepositoryGitattributesRequested,
@@ -35,8 +43,16 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainRequested,
 )
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import (
+    DbusDefinitionRepositoryChangesPushed,
     DbusDefinitionRepositoryCreated,
+    DbusDefinitionRepositoryNixFlakeCreated,
+    DbusDefinitionRepositoryNixFlakeRequested,
+    DbusDefinitionRepositoryPyprojecttomlTemplateCreated,
+    DbusDefinitionRepositoryPyprojecttomlTemplateRequested,
+    DbusDefinitionRepositoryReadmeCreated,
+    DbusDefinitionRepositoryReadmeRequested,
     DbusDefinitionRepositoryRequested,
+    DbusDomainRepositoryChangesPushed,
     DbusDomainRepositoryCreated,
     DbusDomainRepositoryGitattributesCreated,
     DbusDomainRepositoryGitattributesRequested,
@@ -81,10 +97,36 @@ class NewDomainDbusSignalEmitter(DbusSignalEmitter):
         :rtype: Dict
         """
         result = {}
+        key = self.__class__.full_class_name(DefinitionRepositoryChangesPushed)
+        result[key] = [DbusDefinitionRepositoryChangesPushed, BusType.SYSTEM]
         key = self.__class__.full_class_name(DefinitionRepositoryCreated)
         result[key] = [DbusDefinitionRepositoryCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DefinitionRepositoryNixFlakeCreated)
+        result[key] = [DbusDefinitionRepositoryNixFlakeCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DefinitionRepositoryNixFlakeRequested)
+        result[key] = [DbusDefinitionRepositoryNixFlakeRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(
+            DefinitionRepositoryPyprojecttomlTemplateCreated
+        )
+        result[key] = [
+            DbusDefinitionRepositoryPyprojecttomlTemplateCreated,
+            BusType.SYSTEM,
+        ]
+        key = self.__class__.full_class_name(
+            DefinitionRepositoryPyprojecttomlTemplateRequested
+        )
+        result[key] = [
+            DbusDefinitionRepositoryPyprojecttomlTemplateRequested,
+            BusType.SYSTEM,
+        ]
+        key = self.__class__.full_class_name(DefinitionRepositoryReadmeCreated)
+        result[key] = [DbusDefinitionRepositoryReadmeCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DefinitionRepositoryReadmeRequested)
+        result[key] = [DbusDefinitionRepositoryReadmeRequested, BusType.SYSTEM]
         key = self.__class__.full_class_name(DefinitionRepositoryRequested)
         result[key] = [DbusDefinitionRepositoryRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryChangesPushed)
+        result[key] = [DbusDomainRepositoryChangesPushed, BusType.SYSTEM]
         key = self.__class__.full_class_name(DomainRepositoryCreated)
         result[key] = [DbusDomainRepositoryCreated, BusType.SYSTEM]
         key = self.__class__.full_class_name(DomainRepositoryGitattributesCreated)

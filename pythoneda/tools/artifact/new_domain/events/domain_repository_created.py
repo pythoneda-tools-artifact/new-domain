@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/shared/runtime/events/lifecycle/domain_repository_created.py
+pythoneda/tools/artifact/new_domain/events/domain_repository_created.py
 
 This script defines the DomainRepositoryCreated class.
 

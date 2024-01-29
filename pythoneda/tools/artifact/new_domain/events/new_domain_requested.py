@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/shared/runtime/events/lifecycle/new_domain_requested.py
+pythoneda/tools/artifact/new_domain/events/new_domain_requested.py
 
 This script defines the NewDomainRequested class.
 

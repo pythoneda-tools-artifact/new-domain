@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/gitattributes.py
+pythoneda/tools/artifact/new_domain/pyprojecttoml_template.py
 
-This file defines the Gitattributes class.
+This file defines the PyprojecttomlTemplate class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -21,68 +21,55 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .new_file_from_template import NewFileFromTemplate
 from pythoneda.shared import attribute
+from pythoneda.shared.nix.flake import NixFlake
 
 
-class Gitattributes(NewFileFromTemplate):
+class PyprojecttomlTemplate(NewFileFromTemplate):
     """
-    Represents a .gitattributes file.
+    Represents a pyprojecttoml.template file.
 
-    Class name: Gitattributes
+    Class name: PyprojecttomlTemplate
 
     Responsibilities:
-        - Model a .gitattributes file.
-        - Know how to create a new .gitattributes from templates.
+        - Model a pyproject.toml file.
+        - Know how to create a new PyprojecttomlTemplate from templates.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.NewFileFromTemplate
     """
 
     def __init__(
         self,
-        defUrl: str,
-        artifactUrl: str = None,
+        flake: NixFlake,
         templateSubfolder: str = "pythoneda",
     ):
         """
-        Creates a new Gitattributes instance.
-        :param defUrl: The url of the definition repository.
-        :type defUrl: str
-        :param artifactUrl: The url of the artifact repository.
-        :type artifactUrl: str
+        Creates a new PyprojecttomlTemplate instance.
+        :param flake: The associated flake.nix file.
+        :type flake: pythoneda.shared.nix.flake.NixFlake
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
         super().__init__(
             {
-                "def-url": defUrl,
-                "artifact-url": artifactUrl,
+                "flake": flake,
             },
-            "gitattributes",
-            "Gitattributes",
-            ".gitattributes",
+            "pyprojecttoml_template",
+            "PyprojecttomlTemplate",
+            "pyprojecttoml.template",
             "root",
             templateSubfolder,
         )
 
     @property
     @attribute
-    def def_url(self) -> str:
+    def flake(self) -> NixFlake:
         """
-        Retrieves the url of the definition repository.
-        :return: Such information.
-        :rtype: str
+        Retrieves the flake.nix instance.
+        :return: Such instance.
+        :rtype: pythoneda.shared.nix.flake.NixFlake
         """
-        return self.vars["def-url"]
-
-    @property
-    @attribute
-    def artifact_url(self) -> str:
-        """
-        Retrieves the url of the artifact repository.
-        :return: Such information.
-        :rtype: str
-        """
-        return self.vars["artifact-url"]
+        return self.vars["flake"]
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

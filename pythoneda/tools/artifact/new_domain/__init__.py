@@ -25,7 +25,10 @@ from .new_file_from_template import NewFileFromTemplate
 from .gitattributes import Gitattributes
 from .gitignore import Gitignore
 from .readme import Readme
+from .definition_readme import DefinitionReadme
+from .domain_readme import DomainReadme
 from .new_domain import NewDomain
+from .pyprojecttoml_template import PyprojecttomlTemplate
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

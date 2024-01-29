@@ -24,7 +24,28 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 DBUS_PATH = "/pythoneda/tools/artifact/new_domain"
 
 from .dbus_new_domain_event import DbusNewDomainEvent
+from .dbus_definition_repository_changes_pushed import (
+    DbusDefinitionRepositoryChangesPushed,
+)
 from .dbus_definition_repository_created import DbusDefinitionRepositoryCreated
+from .dbus_definition_repository_nix_flake_created import (
+    DbusDefinitionRepositoryNixFlakeCreated,
+)
+from .dbus_definition_repository_nix_flake_requested import (
+    DbusDefinitionRepositoryNixFlakeRequested,
+)
+from .dbus_definition_repository_pyprojecttoml_template_created import (
+    DbusDefinitionRepositoryPyprojecttomlTemplateCreated,
+)
+from .dbus_definition_repository_pyprojecttoml_template_requested import (
+    DbusDefinitionRepositoryPyprojecttomlTemplateRequested,
+)
+from .dbus_definition_repository_readme_created import (
+    DbusDefinitionRepositoryReadmeCreated,
+)
+from .dbus_definition_repository_readme_requested import (
+    DbusDefinitionRepositoryReadmeRequested,
+)
 from .dbus_definition_repository_requested import DbusDefinitionRepositoryRequested
 from .dbus_domain_repository_changes_pushed import DbusDomainRepositoryChangesPushed
 from .dbus_domain_repository_created import DbusDomainRepositoryCreated

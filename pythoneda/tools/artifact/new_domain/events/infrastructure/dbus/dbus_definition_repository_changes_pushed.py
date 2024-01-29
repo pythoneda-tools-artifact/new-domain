@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/domain_repository_changes_pushed.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_definition_repository_changes_pushed.py
 
-This script defines the DomainRepositoryChangesPushed class.
+This file defines the DbusDefinitionRepositoryChangesPushed class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -19,38 +19,43 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from .new_domain_event import NewDomainEvent
-from typing import Dict, List
+from .dbus_new_domain_event import DbusNewDomainEvent
+from dbus_next.service import signal
+from pythoneda.tools.artifact.new_domain.events import DefinitionRepositoryChangesPushed
 
 
-class DomainRepositoryChangesPushed(NewDomainEvent):
+class DbusDefinitionRepositoryChangesPushed(DbusNewDomainEvent):
     """
-    Represents the initial changes in the domain repository have been pushed.
+    D-Bus interface for DefinitionRepositoryChangesPushed.
 
-    Class name: DomainRepositoryChangesPushed
+    Class name: DbusDefinitionRepositoryChangesPushed
 
     Responsibilities:
-        - Represent the fact that the initial changes in the domain repository have been created.
+        - Define the d-bus interface for the DefinitionRepositoryChangesPushed event.
 
     Collaborators:
-        - None
+        - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
     """
 
-    def __init__(
+    def __init__(self):
+        """
+        Creates a new DbusDefinitionRepositoryChangesPushed.
+        """
+        super().__init__()
+
+    @signal()
+    def DefinitionRepositoryChangesPushed(
         self,
-        org: str,
-        name: str,
-        description: str,
-        package: str,
-        githubToken: str,
-        gpgKeyId: str,
-        context: Dict = None,
-        previousEventId: str = None,
-        reconstructedId: str = None,
-        reconstructedPreviousEventIds: List[str] = None,
+        org: "s",
+        name: "s",
+        description: "s",
+        package: "s",
+        githubToken: "s",
+        gpgKeyId: "s",
+        context: "s",
     ):
         """
-        Creates a new DomainRepositoryChangesPushed instance.
+        Defines the DefinitionRepositoryCreated d-bus signal.
         :param org: The name of the organization of the domain repository.
         :type org: str
         :param name: The name of the domain.
@@ -65,26 +70,17 @@ class DomainRepositoryChangesPushed(NewDomainEvent):
         :type gpgKeyId: str
         :param context: A dictionary with additional values.
         :param context: Dict
-        :param previousEventId: The id of the previous event, if any.
-        :type previousEventId: str
-        :param reconstructedId: The id of the event, if it's generated externally.
-        :type reconstructedId: str
-        :param reconstructedPreviousEventIds: The id of the previous events, if an external event
-        is being reconstructed.
-        :type reconstructedPreviousEventIds: List[str]
         """
-        super().__init__(
-            org,
-            name,
-            description,
-            package,
-            githubToken,
-            gpgKeyId,
-            context,
-            previousEventId,
-            reconstructedId,
-            reconstructedPreviousEventIds,
-        )
+        pass
+
+    @classmethod
+    def event_class(cls):
+        """
+        Retrieves the specific event class.
+        :return: Such class.
+        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryChangesPushed)
+        """
+        return DefinitionRepositoryChangesPushed
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

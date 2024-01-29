@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/domain_repository_gitignore_created.py
+pythoneda/tools/artifact/new_domain/events/definition_repository_nix_flake_created.py
 
-This script defines the DomainRepositoryGitignoreCreated class.
+This script defines the DefinitionRepositoryNixFlakeCreated class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -23,14 +23,14 @@ from .new_domain_event import NewDomainEvent
 from typing import Dict, List
 
 
-class DomainRepositoryGitignoreCreated(NewDomainEvent):
+class DefinitionRepositoryNixFlakeCreated(NewDomainEvent):
     """
-    Represents the .gitignore file has been created on a domain repository.
+    Represents the flake.nix file has been created on a definition repository.
 
-    Class name: DomainRepositoryGitignoreCreated
+    Class name: DefinitionRepositoryNixFlakeCreated
 
     Responsibilities:
-        - Represent the fact that the .gitignore file has been created.
+        - Represent the fact that the flake.nix file has been created.
 
     Collaborators:
         - None
@@ -50,7 +50,7 @@ class DomainRepositoryGitignoreCreated(NewDomainEvent):
         reconstructedPreviousEventIds: List[str] = None,
     ):
         """
-        Creates a new DomainRepositoryGitignoreCreated instance.
+        Creates a new DefinitionRepositoryNixFlakeCreated instance.
         :param org: The name of the organization of the domain repository.
         :type org: str
         :param name: The name of the domain.
@@ -61,10 +61,10 @@ class DomainRepositoryGitignoreCreated(NewDomainEvent):
         :type package: str
         :param githubToken: The github token.
         :type githubToken: str
+        :param gpgKeyId: The GnuPG key id.
+        :type gpgKeyId: str
         :param context: A dictionary with additional values.
         :param context: Dict
-        :param defUrl: The url of the definition repository.
-        :type defUrl: str
         :param previousEventId: The id of the previous event, if any.
         :type previousEventId: str
         :param reconstructedId: The id of the event, if it's generated externally.

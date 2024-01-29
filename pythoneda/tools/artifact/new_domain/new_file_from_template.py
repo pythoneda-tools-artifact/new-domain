@@ -19,7 +19,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import abc
 import os
 from pathlib import Path
 from pythoneda.shared import attribute, Entity
@@ -27,7 +26,7 @@ from stringtemplate3 import PathGroupLoader, StringTemplateGroup
 from typing import Dict
 
 
-class NewFileFromTemplate(Entity, abc.ABC):
+class NewFileFromTemplate(Entity):
     """
     A new file whose contents are generated from a StringTemplate template.
 
@@ -43,17 +42,33 @@ class NewFileFromTemplate(Entity, abc.ABC):
     def __init__(
         self,
         vars: Dict,
+        templateName: str,
+        templateGroup: str,
+        outputFile: str,
+        rootTemplate: str = "root",
         templateSubfolder: str = "pythoneda",
     ):
         """
         Creates a new NewFileFromTemplate instance.
         :param vars: The dynamic content used by the template.
         :type vars: Dict
+        :param templateName: The name of the template file.
+        :type templateName: str
+        :param templateGroup: The name of the template group.
+        :type templateGroup: str
+        :param outputFile: The output file.
+        :type outputFile: str
+        :param rootTemplate: The root template.
+        :type rootTemplate: str
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
         super().__init__()
         self._vars = vars
+        self._template_name = templateName
+        self._template_group = templateGroup
+        self._output_file = outputFile
+        self._root_template = rootTemplate
         self._template_subfolder = templateSubfolder
 
     @property
@@ -76,7 +91,8 @@ class NewFileFromTemplate(Entity, abc.ABC):
         """
         return self._template_subfolder
 
-    def parent_folder(self, path: str) -> str:
+    @classmethod
+    def parent_folder(cls, path: str) -> str:
         """
         Retrieves the parent folder of given path.
         :param path: The path.
@@ -86,7 +102,8 @@ class NewFileFromTemplate(Entity, abc.ABC):
         """
         return os.path.dirname(path)
 
-    def templates_folder(self) -> str:
+    @classmethod
+    def templates_folder(cls) -> str:
         """
         Retrieves the templates folder.
         :return: Such location.
@@ -94,10 +111,10 @@ class NewFileFromTemplate(Entity, abc.ABC):
         """
         return (
             Path(
-                self.parent_folder(
-                    self.parent_folder(
-                        self.parent_folder(
-                            self.parent_folder(self.parent_folder(__file__))
+                cls.parent_folder(
+                    cls.parent_folder(
+                        cls.parent_folder(
+                            cls.parent_folder(cls.parent_folder(__file__))
                         )
                     )
                 )
@@ -105,31 +122,41 @@ class NewFileFromTemplate(Entity, abc.ABC):
             / "templates"
         )
 
-    @abc.abstractmethod
+    @property
     def template_name(self) -> str:
         """
         Retrieves the name of the stg file to use.
         :return: Such information.
         :rtype: str
         """
-        pass
+        return self._template_name
 
-    @abc.abstractmethod
+    @property
+    def template_group(self) -> str:
+        """
+        Retrieves the name of the template group.
+        :return: Such information.
+        :rtype: str
+        """
+        return self._template_group
+
+    @property
     def output_file(self) -> str:
         """
         Retrieves the name of the output file to generate.
         :return: Such information.
         :rtype: str
         """
-        pass
+        return self._output_file
 
+    @property
     def root_template(self) -> str:
         """
         Retrieves the name of the root template.
         :return: Such information.
         :rtype: str
         """
-        return "root"
+        return self._root_template
 
     def generate(self, outputFolder: str) -> str:
         """
@@ -141,20 +168,22 @@ class NewFileFromTemplate(Entity, abc.ABC):
         """
         self.process_template(
             outputFolder,
-            self.template_name(),
-            Path(self.templates_folder()) / self.template_subfolder,
-            self.output_file(),
-            self.root_template(),
+            self.template_name,
+            self.template_group,
+            Path(self.__class__.templates_folder()) / self.template_subfolder,
+            self.output_file,
+            self.root_template,
         )
-        return Path(outputFolder) / self.output_file()
+        return Path(outputFolder) / self.output_file
 
     def process_template(
         self,
         outputFolder: str,
         templateName: str,
+        templateGroup: str,
         templateFolder: str,
         outputFileName: str,
-        rootTemplate: str = "root",
+        rootTemplate: str,
     ):
         """
         Processes a template.
@@ -162,6 +191,8 @@ class NewFileFromTemplate(Entity, abc.ABC):
         :type outputFolder: str
         :param templateName: The name of the stringtemplate template.
         :type templateName: str
+        :param templateGroup: The name of the stringtemplate group.
+        :type templateGroup: str
         :param templateFolder: The subfolder with the templates.
         :type templateFolder: str
         :param rootTemplate: The root template.
@@ -175,7 +206,7 @@ class NewFileFromTemplate(Entity, abc.ABC):
         ) as f:
             # Create a group from the string content
             group = StringTemplateGroup(
-                name=templateName, file=f, rootDir=str(templateFolder)
+                name=templateGroup, file=f, rootDir=str(templateFolder)
             )
 
             root = group.getInstanceOf(rootTemplate)

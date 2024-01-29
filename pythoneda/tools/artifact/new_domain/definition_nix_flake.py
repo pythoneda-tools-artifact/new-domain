@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/readme.py
+pythoneda/tools/artifact/new_domain/definition_nix_flake.py
 
-This file defines the Readme class.
+This file defines the DefinitionNixFlake class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -19,23 +19,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import abc
+import datetime
 from .new_file_from_template import NewFileFromTemplate
 from pythoneda.shared import attribute
+from pythoneda.shared.nix.flake import NixFlake
 
 
-class Readme(NewFileFromTemplate, abc.ABC):
+class DefinitionNixFlake(NixFlake):
     """
-    Represents a README file.
+    Represents a flake.nix file in the definition repository.
 
-    Class name: Readme
+    Class name: DefinitionNixFlake
 
     Responsibilities:
-        - Model a README file.
-        - Know how to create a new README from templates.
+        - Model a flake.nix file.
+        - Know how to create a new DefinitionNixFlake from templates.
 
     Collaborators:
-        - pythoneda.tools.artifact.new_domain.NewFileFromTemplate
+        - pythoneda.shared.nix.flake.NixFlake
     """
 
     def __init__(
@@ -47,14 +48,10 @@ class Readme(NewFileFromTemplate, abc.ABC):
         defOrg: str,
         url: str,
         defUrl: str,
-        templateName: str,
-        templateGroup: str,
-        outputFile: str = "README.md",
-        rootTemplate: str = "root",
         templateSubfolder: str = "pythoneda",
     ):
         """
-        Creates a new Readme instance.
+        Creates a new DefinitionNixFlake instance.
         :param org: The name of the organization.
         :type org: str
         :param name: The repository name.
@@ -69,32 +66,21 @@ class Readme(NewFileFromTemplate, abc.ABC):
         :type url: str
         :param defUrl: The url of the definition repository.
         :type defUrl: str
-        :param templateName: The name of the template file.
-        :type templateName: str
-        :param templateGroup: The name of the template group.
-        :type templateGroup: str
-        :param outputFile: The output file.
-        :type outputFile: str
-        :param rootTemplate: The root template.
-        :type rootTemplate: str
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
         super().__init__(
-            {
-                "org": org,
-                "name": name,
-                "description": description,
-                "package": package,
-                "def-org": defOrg,
-                "url": url,
-                "def-url": defUrl,
-            },
-            templateName,
-            templateGroup,
-            outputFile,
-            rootTemplate,
+            name,
+            "0.0.0",
+            self.__class__.url_for,
+            [],
             templateSubfolder,
+            description,
+            url,
+            "gplv3",
+            ["rydnr"],
+            datetime.datetime.now().year,
+            "rydnr",
         )
 
     @property
@@ -166,6 +152,14 @@ class Readme(NewFileFromTemplate, abc.ABC):
         :rtype: str
         """
         return self.vars["def-url"]
+
+    def templates_folder(self) -> str:
+        """
+        Retrieves the templates folder.
+        :return: Such location.
+        :rtype: str
+        """
+        return NewFileFromTemplate.templates_folder()
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

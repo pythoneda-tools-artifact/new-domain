@@ -32,9 +32,23 @@ from pythoneda.shared.git import (
     GitRemote,
 )
 from pythoneda.shared.git.github import Repository
+from pythoneda.shared.nix.flake import (
+    FlakeUtilsNixFlake,
+    NixosNixFlake,
+    PythonedaNixFlake,
+    PythonedaSharedBannerNixFlake,
+    PythonedaSharedDomainNixFlake,
+)
 from pythoneda.tools.artifact.new_domain.events import (
+    DefinitionRepositoryChangesPushed,
     DefinitionRepositoryCreated,
+    DefinitionRepositoryPyprojecttomlTemplateCreated,
+    DefinitionRepositoryPyprojecttomlTemplateRequested,
+    DefinitionRepositoryNixFlakeCreated,
+    DefinitionRepositoryNixFlakeRequested,
     DefinitionRepositoryRequested,
+    DefinitionRepositoryReadmeCreated,
+    DefinitionRepositoryReadmeRequested,
     DomainRepositoryChangesPushed,
     DomainRepositoryCreated,
     DomainRepositoryGitattributesCreated,
@@ -47,9 +61,11 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainCreated,
     NewDomainRequested,
 )
-from .readme import Readme
+from .definition_readme import DefinitionReadme
+from .domain_readme import DomainReadme
 from .gitattributes import Gitattributes
 from .gitignore import Gitignore
+from .pyprojecttoml_template import PyprojecttomlTemplate
 import shutil
 import tempfile
 from typing import List
@@ -177,30 +193,6 @@ class NewDomain(EventListener):
         ]
 
     @classmethod
-    @listen(DefinitionRepositoryRequested)
-    async def listen_DefinitionRepositoryRequested(
-        cls, event: DefinitionRepositoryRequested
-    ) -> List:
-        """
-        Creates a definition repository upon receiving a DefinitionRepositoryRequested event.
-        :param event: The trigger event.
-        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryRequested
-        :return: The event representing the new domain has been created, or None if the process failed.
-        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryCreated
-        """
-        r = Repository(event.github_token)
-        response = await r.create(event.org, event.name)
-        return DefinitionRepositoryCreated(
-            event.org,
-            event.name,
-            event.description,
-            event.package,
-            event.github_token,
-            event.gpg_key_id,
-            event.context,
-        )
-
-    @classmethod
     @listen(DomainRepositoryCreated)
     async def listen_DomainRepositoryCreated(
         cls, event: DomainRepositoryCreated
@@ -251,7 +243,7 @@ class NewDomain(EventListener):
     @classmethod
     @listen(DomainRepositoryReadmeRequested)
     async def listen_DomainRepositoryReadmeRequested(
-        cls, event: DomainRepositoryReadmeCreated
+        cls, event: DomainRepositoryReadmeRequested
     ) -> DomainRepositoryReadmeCreated:
         """
         Creates the README file in the domain repository.
@@ -260,7 +252,7 @@ class NewDomain(EventListener):
         :return: The event representing the README file has been created.
         :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryReadmeCreated
         """
-        readme = Readme(
+        readme = DomainReadme(
             event.org,
             event.name,
             event.description,
@@ -285,7 +277,7 @@ class NewDomain(EventListener):
     @classmethod
     @listen(DomainRepositoryGitattributesRequested)
     async def listen_DomainRepositoryGitattributesRequested(
-        cls, event: DomainRepositoryGitattributesCreated
+        cls, event: DomainRepositoryGitattributesRequested
     ) -> DomainRepositoryGitattributesCreated:
         """
         Creates the .gitattributes file in the domain repository.
@@ -315,7 +307,7 @@ class NewDomain(EventListener):
     @classmethod
     @listen(DomainRepositoryGitignoreRequested)
     async def listen_DomainRepositoryGitignoreRequested(
-        cls, event: DomainRepositoryGitignoreCreated
+        cls, event: DomainRepositoryGitignoreRequested
     ) -> DomainRepositoryGitignoreCreated:
         """
         Creates the .gitignore file in the domain repository.
@@ -354,6 +346,220 @@ class NewDomain(EventListener):
         GitCommit(repo_folder).commit("Initial commit", False)
         GitPush(repo_folder).push_branch("main", "origin")
         return DomainRepositoryChangesPushed(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DefinitionRepositoryRequested)
+    async def listen_DefinitionRepositoryRequested(
+        cls, event: DefinitionRepositoryRequested
+    ) -> List:
+        """
+        Creates a definition repository upon receiving a DefinitionRepositoryRequested event.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryRequested
+        :return: The event representing the new domain has been created, or None if the process failed.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryCreated
+        """
+        r = Repository(event.github_token)
+        response = await r.create(event.context["def-org"], event.name)
+        return DefinitionRepositoryCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DefinitionRepositoryCreated)
+    async def listen_DefinitionRepositoryCreated(
+        cls, event: DefinitionRepositoryCreated
+    ) -> List:
+        """
+        Requests creating some files in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryCreated
+        :return: The event representing the new domain has been created, or None if the process failed.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryCreated
+        """
+        temp_dir = tempfile.mkdtemp()
+        atexit.register(lambda: cleanup_temp_dir(temp_dir))
+        repo = GitClone(temp_dir).clone(event.context["def-url"])
+        repo_folder = os.path.join(temp_dir, event.name)
+        GitBranch(repo_folder).branch("main")
+        event.context["def-repo-folder"] = repo_folder
+        return [
+            DefinitionRepositoryReadmeRequested(
+                event.org,
+                event.name,
+                event.description,
+                event.package,
+                event.github_token,
+                event.gpg_key_id,
+                event.context,
+            ),
+            DefinitionRepositoryNixFlakeRequested(
+                event.org,
+                event.name,
+                event.description,
+                event.package,
+                event.github_token,
+                event.gpg_key_id,
+                event.context,
+            ),
+            DefinitionRepositoryPyprojecttomlTemplateRequested(
+                event.org,
+                event.name,
+                event.description,
+                event.package,
+                event.github_token,
+                event.gpg_key_id,
+                event.context,
+            ),
+        ]
+
+    @classmethod
+    @listen(DefinitionRepositoryReadmeRequested)
+    async def listen_DefinitionRepositoryReadmeRequested(
+        cls, event: DefinitionRepositoryReadmeRequested
+    ) -> DefinitionRepositoryReadmeCreated:
+        """
+        Creates the README file in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryReadmeRequested
+        :return: The event representing the README file has been created.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryReadmeCreated
+        """
+        readme = DefinitionReadme(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.context["def-org"],
+            event.context["url"],
+            event.context["def-url"],
+        )
+        repo_folder = event.context["def-repo-folder"]
+        readme_file = readme.generate(repo_folder)
+        GitAdd(repo_folder).add(readme_file)
+        return DefinitionRepositoryReadmeCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    def url_for(cls, url: str, version: str) -> str:
+        """
+        Retrieves the final url, including the version.
+        :param url: The original url.
+        :type url: str
+        :param version: The version.
+        :type version: str
+        :return: The final url.
+        :rtype: str
+        """
+        return lambda: f"{url}/{version}"
+
+    @classmethod
+    @listen(DefinitionRepositoryNixFlakeRequested)
+    async def listen_DefinitionRepositoryNixFlakeRequested(
+        cls, event: DefinitionRepositoryNixFlakeRequested
+    ) -> DefinitionRepositoryNixFlakeCreated:
+        """
+        Creates the flake.nix file in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryNixFlakeRequested
+        :return: The event representing the README file has been created.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryNixFlakeCreated
+        """
+        flake = PythonedaNixFlake(
+            event.name,
+            "0.0.0",
+            lambda version: cls.url_for(event.context["url"], version),
+            [
+                FlakeUtilsNixFlake("v1.0.0"),
+                NixosNixFlake("23.11"),
+                PythonedaSharedBannerNixFlake("0.0.47"),
+                PythonedaSharedDomainNixFlake("0.0.30"),
+            ],
+            event.description,
+            event.context["url"],
+            "B",
+            "D",
+            "D",
+        )
+        event.context["flake"] = flake
+        repo_folder = event.context["def-repo-folder"]
+        flake_file = flake.generate_flake(repo_folder)
+        GitAdd(repo_folder).add(flake_file)
+        return DefinitionRepositoryNixFlakeCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DefinitionRepositoryPyprojecttomlTemplateRequested)
+    async def listen_DefinitionRepositoryPyprojecttomlTemplateRequested(
+        cls, event: DefinitionRepositoryPyprojecttomlTemplateRequested
+    ) -> DefinitionRepositoryPyprojecttomlTemplateCreated:
+        """
+        Creates the README file in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryPyprojecttomlTemplateRequested
+        :return: The event representing the pyprojecttoml.template file has been created.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryPyprojecttomlTemplateCreated
+        """
+        pyprojecttoml_template = PyprojecttomlTemplate(
+            event.context["flake"],
+        )
+        repo_folder = event.context["def-repo-folder"]
+        pyprojecttoml_template_file = pyprojecttoml_template.generate(repo_folder)
+        GitAdd(repo_folder).add(pyprojecttoml_template_file)
+        return DefinitionRepositoryPyprojecttomlTemplateCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DefinitionRepositoryPyprojecttomlTemplateCreated)
+    async def listen_DefinitionRepositoryPyprojecttomlTemplateCreated(
+        cls, event: DefinitionRepositoryPyprojecttomlTemplateCreated
+    ) -> DefinitionRepositoryChangesPushed:
+        """
+        Pushes the changes in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryPyprojecttomlCreated
+        :return: The event representing the changes have been pushe.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryChangesPushed
+        """
+        repo_folder = event.context["def-repo-folder"]
+        GitCommit(repo_folder).commit("Initial commit", False)
+        GitPush(repo_folder).push_branch("main", "origin")
+        return DefinitionRepositoryChangesPushed(
             event.org,
             event.name,
             event.description,

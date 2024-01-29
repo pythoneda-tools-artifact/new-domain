@@ -1,6 +1,6 @@
-// templates/pythoneda/readme.stg
+// templates/pythoneda/domain_readme.stg
 //
-// This file defines the template for PythonEDA-related README.md files.
+// This file defines the template for PythonEDA-related README.md files in domain repositories.
 //
 // Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 //
@@ -17,28 +17,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
-group Readme;
+group DomainReadme;
 
 //  root template
-//  - readme: The readme object.
-root(readme) ::= <<
-# <readme.org>/<readme.name>
+//  - domain_readme: The readme object.
+root(domain_readme) ::= <<
+# <domain_readme.org>/<domain_readme.name>
 
-<readme.description>
+<domain_readme.description>
 
 ## How to declare it in your flake
 
-Check the latest tag of the artifact repository: <readme.def_url>, and use it instead of the `[version]` placeholder below.
+Check the latest tag of the artifact repository: <domain_readme.def_url>, and use it instead of the `[version]` placeholder below.
 
 ```nix
 {
   description = "[..]";
   inputs = rec {
     [..]
-    <readme.org>-<readme.name> = {
+    <domain_readme.org>-<domain_readme.name> = {
       [optional follows]
       url =
-        "github:<readme.def_org>/<readme.name>/[version]";
+        "github:<domain_readme.def_org>/<domain_readme.name>/[version]";
     };
   };
   outputs = [..]
@@ -47,13 +47,13 @@ Check the latest tag of the artifact repository: <readme.def_url>, and use it in
 
 Should you use another PythonEDA modules, you might want to pin those also used by this project. The same applies to [https://nixos/nixpkgs](nixpkgs "nixpkgs") and [https://github.com/numtide/flake-utils](flake-utils "flake-utils").
 
-The Nix flake is managed by the [<readme.def_url>](<readme.name> "<readme.name>") definition repository.
+The Nix flake is managed by the [<domain_readme.def_url>](<domain_readme.name> "<domain_readme.name>") definition repository.
 
 Use the specific package depending on your system (one of `flake-utils.lib.defaultSystems`) and Python version:
 
-- `#packages.[system].<readme.org>-<readme.name>-python38`
-- `#packages.[system].<readme.org>-<readme.name>-python39`
-- `#packages.[system].<readme.org>-<readme.name>-python310`
-- `#packages.[system].<readme.org>-<readme.name>-python311`
+- `#packages.[system].<domain_readme.org>-<domain_readme.name>-python38`
+- `#packages.[system].<domain_readme.org>-<domain_readme.name>-python39`
+- `#packages.[system].<domain_readme.org>-<domain_readme.name>-python310`
+- `#packages.[system].<domain_readme.org>-<domain_readme.name>-python311`
 
 >>
