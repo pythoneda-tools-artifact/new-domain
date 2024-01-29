@@ -32,13 +32,6 @@ from pythoneda.shared.git import (
     GitRemote,
 )
 from pythoneda.shared.git.github import Repository
-from pythoneda.shared.nix.flake import (
-    FlakeUtilsNixFlake,
-    NixosNixFlake,
-    PythonedaNixFlake,
-    PythonedaSharedBannerNixFlake,
-    PythonedaSharedDomainNixFlake,
-)
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryChangesPushed,
     DefinitionRepositoryCreated,
@@ -61,6 +54,7 @@ from pythoneda.tools.artifact.new_domain.events import (
     NewDomainCreated,
     NewDomainRequested,
 )
+from .definition_nix_flake import DefinitionNixFlake
 from .definition_readme import DefinitionReadme
 from .domain_readme import DomainReadme
 from .gitattributes import Gitattributes
@@ -462,19 +456,6 @@ class NewDomain(EventListener):
         )
 
     @classmethod
-    def url_for(cls, url: str, version: str) -> str:
-        """
-        Retrieves the final url, including the version.
-        :param url: The original url.
-        :type url: str
-        :param version: The version.
-        :type version: str
-        :return: The final url.
-        :rtype: str
-        """
-        return lambda: f"{url}/{version}"
-
-    @classmethod
     @listen(DefinitionRepositoryNixFlakeRequested)
     async def listen_DefinitionRepositoryNixFlakeRequested(
         cls, event: DefinitionRepositoryNixFlakeRequested
@@ -486,21 +467,12 @@ class NewDomain(EventListener):
         :return: The event representing the README file has been created.
         :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryNixFlakeCreated
         """
-        flake = PythonedaNixFlake(
+        flake = DefinitionNixFlake(
+            event.org,
             event.name,
-            "0.0.0",
-            lambda version: cls.url_for(event.context["url"], version),
-            [
-                FlakeUtilsNixFlake("v1.0.0"),
-                NixosNixFlake("23.11"),
-                PythonedaSharedBannerNixFlake("0.0.47"),
-                PythonedaSharedDomainNixFlake("0.0.30"),
-            ],
             event.description,
+            event.package,
             event.context["url"],
-            "B",
-            "D",
-            "D",
         )
         event.context["flake"] = flake
         repo_folder = event.context["def-repo-folder"]
