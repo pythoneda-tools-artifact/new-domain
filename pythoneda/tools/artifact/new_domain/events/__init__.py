@@ -24,6 +24,9 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 from .new_domain_event import NewDomainEvent
 from .definition_repository_changes_pushed import DefinitionRepositoryChangesPushed
 from .definition_repository_created import DefinitionRepositoryCreated
+from .definition_repository_flake_lock_created import (
+    DefinitionRepositoryFlakeLockCreated,
+)
 from .definition_repository_nix_flake_created import DefinitionRepositoryNixFlakeCreated
 from .definition_repository_nix_flake_requested import (
     DefinitionRepositoryNixFlakeRequested,

@@ -28,6 +28,9 @@ from .dbus_definition_repository_changes_pushed import (
     DbusDefinitionRepositoryChangesPushed,
 )
 from .dbus_definition_repository_created import DbusDefinitionRepositoryCreated
+from .dbus_definition_repository_flake_lock_created import (
+    DbusDefinitionRepositoryFlakeLockCreated,
+)
 from .dbus_definition_repository_nix_flake_created import (
     DbusDefinitionRepositoryNixFlakeCreated,
 )

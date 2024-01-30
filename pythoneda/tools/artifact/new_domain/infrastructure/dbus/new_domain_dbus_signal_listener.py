@@ -23,6 +23,7 @@ from dbus_next import BusType, Message
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryChangesPushed,
     DefinitionRepositoryCreated,
+    DefinitionRepositoryFlakeLockCreated,
     DefinitionRepositoryNixFlakeCreated,
     DefinitionRepositoryNixFlakeRequested,
     DefinitionRepositoryPyprojecttomlTemplateCreated,
@@ -45,6 +46,7 @@ from pythoneda.tools.artifact.new_domain.events import (
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import (
     DbusDefinitionRepositoryChangesPushed,
     DbusDefinitionRepositoryCreated,
+    DbusDefinitionRepositoryFlakeLockCreated,
     DbusDefinitionRepositoryNixFlakeCreated,
     DbusDefinitionRepositoryNixFlakeRequested,
     DbusDefinitionRepositoryPyprojecttomlTemplateCreated,
@@ -103,6 +105,8 @@ class NewDomainDbusSignalListener(DbusSignalListener):
         result[key] = [DbusDefinitionRepositoryChangesPushed, BusType.SYSTEM]
         key = self.__class__.full_class_name(DefinitionRepositoryCreated)
         result[key] = [DbusDefinitionRepositoryCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DefinitionRepositoryFlakeLockCreated)
+        result[key] = [DbusDefinitionRepositoryFlakeLockCreated, BusType.SYSTEM]
         key = self.__class__.full_class_name(DefinitionRepositoryNixFlakeCreated)
         result[key] = [DbusDefinitionRepositoryNixFlakeCreated, BusType.SYSTEM]
         key = self.__class__.full_class_name(DefinitionRepositoryNixFlakeRequested)

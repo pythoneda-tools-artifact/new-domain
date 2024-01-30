@@ -32,9 +32,11 @@ from pythoneda.shared.git import (
     GitRemote,
 )
 from pythoneda.shared.git.github import Repository
+from pythoneda.shared.nix.flake import NixFlake
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryChangesPushed,
     DefinitionRepositoryCreated,
+    DefinitionRepositoryFlakeLockCreated,
     DefinitionRepositoryPyprojecttomlTemplateCreated,
     DefinitionRepositoryPyprojecttomlTemplateRequested,
     DefinitionRepositoryNixFlakeCreated,
@@ -520,6 +522,31 @@ class NewDomain(EventListener):
     @listen(DefinitionRepositoryPyprojecttomlTemplateCreated)
     async def listen_DefinitionRepositoryPyprojecttomlTemplateCreated(
         cls, event: DefinitionRepositoryPyprojecttomlTemplateCreated
+    ) -> DefinitionRepositoryFlakeLockCreated:
+        """
+        Creates the flake.lock in the definition repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.event.DefinitionRepositoryPyprojecttomlCreated
+        :return: The event representing the changes have been pushe.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryFlakeLockCreated
+        """
+        repo_folder = event.context["def-repo-folder"]
+        await NixFlake.update_flake_lock(repo_folder)
+        GitAdd(repo_folder).add("flake.lock")
+        return DefinitionRepositoryFlakeLockCreated(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DefinitionRepositoryFlakeLockCreated)
+    async def listen_DefinitionRepositoryFlakeLockCreated(
+        cls, event: DefinitionRepositoryFlakeLockCreated
     ) -> DefinitionRepositoryChangesPushed:
         """
         Pushes the changes in the definition repository.

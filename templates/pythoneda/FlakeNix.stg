@@ -94,6 +94,7 @@ root(flake) ::= <<
       else
         defaultSystems ++ [ "armv6l-linux" ];
     in flake-utils.lib.eachSystem supportedSystems (system:
+      let
         org = "<flake.org>";
         repo = "<flake.name>";
         version = "<flake.version>";
