@@ -31,12 +31,12 @@ from typing import List
 
 class CreateDomainRepositoryGitattributes(EventListener):
     """
-    Manages the creation of the GITATTRIBUTES file in the domain repository.
+    Manages the creation of the .gitattributes file in the domain repository.
 
     Class name: CreateDomainRepositoryGitattributes
 
     Responsibilities:
-        - Know the steps required to create the GITATTRIBUTES file in the new domain repository.
+        - Know the steps required to create the .gitattributes file in the new domain repository.
 
     Collaborators:
         - pythoneda.tools.artifact.new_domain.events.DomainRepositoryGitattributesCreated

@@ -95,6 +95,12 @@ from .dbus_domain_repository_gitignore_created import (
 from .dbus_domain_repository_gitignore_requested import (
     DbusDomainRepositoryGitignoreRequested,
 )
+from .dbus_domain_repository_init_files_created import (
+    DbusDomainRepositoryInitFilesCreated,
+)
+from .dbus_domain_repository_init_files_requested import (
+    DbusDomainRepositoryInitFilesRequested,
+)
 from .dbus_domain_repository_push_requested import DbusDomainRepositoryPushRequested
 from .dbus_domain_repository_readme_created import DbusDomainRepositoryReadmeCreated
 from .dbus_domain_repository_readme_requested import DbusDomainRepositoryReadmeRequested

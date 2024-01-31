@@ -31,12 +31,12 @@ from typing import List
 
 class CreateDomainRepositoryGitignore(EventListener):
     """
-    Manages the creation of the GITIGNORE file in the domain repository.
+    Manages the creation of the .gitignore file in the domain repository.
 
     Class name: CreateDomainRepositoryGitignore
 
     Responsibilities:
-        - Know the steps required to create the GITIGNORE file in the new domain repository.
+        - Know the steps required to create the .gitignore file in the new domain repository.
 
     Collaborators:
         - pythoneda.tools.artifact.new_domain.events.DomainRepositoryGitignoreCreated

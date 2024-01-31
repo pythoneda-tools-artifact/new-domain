@@ -71,6 +71,12 @@ from .domain_repository_gitignore_created import (
 from .domain_repository_gitignore_requested import (
     DomainRepositoryGitignoreRequested,
 )
+from .domain_repository_init_files_created import (
+    DomainRepositoryInitFilesCreated,
+)
+from .domain_repository_init_files_requested import (
+    DomainRepositoryInitFilesRequested,
+)
 from .domain_repository_push_requested import DomainRepositoryPushRequested
 from .domain_repository_readme_created import DomainRepositoryReadmeCreated
 from .domain_repository_readme_requested import DomainRepositoryReadmeRequested

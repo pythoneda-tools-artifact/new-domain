@@ -50,6 +50,8 @@ from pythoneda.tools.artifact.new_domain.events import (
     DomainRepositoryGitattributesRequested,
     DomainRepositoryGitignoreCreated,
     DomainRepositoryGitignoreRequested,
+    DomainRepositoryInitFilesCreated,
+    DomainRepositoryInitFilesRequested,
     DomainRepositoryPushRequested,
     DomainRepositoryReadmeCreated,
     DomainRepositoryReadmeRequested,
@@ -197,6 +199,10 @@ class Signals(BaseObject):
         result[key] = [DbusDomainRepositoryGitignoreCreated, BusType.SYSTEM]
         key = self.__class__.full_class_name(DomainRepositoryGitignoreRequested)
         result[key] = [DbusDomainRepositoryGitignoreRequested, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryInitFilesCreated)
+        result[key] = [DbusDomainRepositoryInitFilesCreated, BusType.SYSTEM]
+        key = self.__class__.full_class_name(DomainRepositoryInitFilesRequested)
+        result[key] = [DbusDomainRepositoryInitFilesRequested, BusType.SYSTEM]
         key = self.__class__.full_class_name(DomainRepositoryPushRequested)
         result[key] = [DbusDomainRepositoryPushRequested, BusType.SYSTEM]
         key = self.__class__.full_class_name(DomainRepositoryReadmeCreated)

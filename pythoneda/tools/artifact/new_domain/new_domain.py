@@ -33,6 +33,8 @@ from pythoneda.tools.artifact.new_domain.events import (
     DomainRepositoryGitattributesRequested,
     DomainRepositoryGitignoreCreated,
     DomainRepositoryGitignoreRequested,
+    DomainRepositoryInitFilesCreated,
+    DomainRepositoryInitFilesRequested,
     DomainRepositoryPushRequested,
     DomainRepositoryRequested,
     DomainRepositoryReadmeCreated,
@@ -226,13 +228,35 @@ class NewDomain(EventListener):
     @listen(DomainRepositoryGitignoreCreated)
     async def listen_DomainRepositoryGitignoreCreated(
         cls, event: DomainRepositoryGitignoreCreated
+    ) -> DomainRepositoryInitFilesRequested:
+        """
+        Requests the creation of __init__.py files in the domain repository.
+        :param event: The trigger event.
+        :type event: pythoneda.tools.artifact.new_domain.events.DomainRepositoryGitignoreCreated
+        :return: The event representing a request to create the __init__.py files in the domain repository.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryInitFilesRequested
+        """
+        return DomainRepositoryInitFilesRequested(
+            event.org,
+            event.name,
+            event.description,
+            event.package,
+            event.github_token,
+            event.gpg_key_id,
+            event.context,
+        )
+
+    @classmethod
+    @listen(DomainRepositoryInitFilesCreated)
+    async def listen_DomainRepositoryInitFilesCreated(
+        cls, event: DomainRepositoryInitFilesCreated
     ) -> DomainRepositoryCommitRequested:
         """
         Requests a commit in the domain repository.
         :param event: The trigger event.
-        :type event: pythoneda.tools.artifact.new_domain.events.DomainRepositoryCommitRequested
+        :type event: pythoneda.tools.artifact.new_domain.events.DomainRepositoryInitFilesCreated
         :return: The event representing a request to commit the changes in the domain repository.
-        :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryCommitRequested.
+        :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryCommitRequested
         """
         return DomainRepositoryCommitRequested(
             event.org,
