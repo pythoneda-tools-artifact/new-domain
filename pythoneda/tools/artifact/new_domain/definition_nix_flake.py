@@ -52,6 +52,7 @@ class DefinitionNixFlake(PythonedaNixFlake):
         description: str,
         package: str,
         url: str,
+        version: str,
         templateSubfolder: str = "pythoneda",
     ):
         """
@@ -64,13 +65,15 @@ class DefinitionNixFlake(PythonedaNixFlake):
         :type package: str
         :param url: The url of the repository.
         :type url: str
+        :param version: The version.
+        :type version: str
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
         """
         super().__init__(
             name,
-            "0.0.0",
-            lambda version: self.__class__.url_for(url, version),
+            version,
+            lambda v: self.__class__.url_for(url, v),
             [
                 FlakeUtilsNixFlake("v1.0.0"),
                 NixosNixFlake("23.11"),

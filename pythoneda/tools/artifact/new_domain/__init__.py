@@ -21,6 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
+from .clone_definition_repository_locally import CloneDefinitionRepositoryLocally
+from .clone_domain_repository_locally import CloneDomainRepositoryLocally
+from .clone_repository_locally import CloneRepositoryLocally
+from .create_domain_repository import CreateDomainRepository
+from .create_domain_repository_gitattributes import CreateDomainRepositoryGitattributes
+from .create_domain_repository_gitignore import CreateDomainRepositoryGitignore
+from .create_domain_repository_readme import CreateDomainRepositoryReadme
 from .new_file_from_template import NewFileFromTemplate
 from .gitattributes import Gitattributes
 from .gitignore import Gitignore

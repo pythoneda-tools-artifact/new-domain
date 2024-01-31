@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_definition_repository_pyprojecttoml_template_created.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_definition_repository_commit_requested.py
 
-This file defines the DbusDefinitionRepositoryPyprojecttomlTemplateCreated class.
+This file defines the DbusDefinitionRepositoryCommitRequested class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -22,18 +22,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from .dbus_new_domain_event import DbusNewDomainEvent
 from dbus_next.service import signal
 from pythoneda.tools.artifact.new_domain.events import (
-    DefinitionRepositoryPyprojecttomlTemplateCreated,
+    DefinitionRepositoryCommitRequested,
 )
 
 
-class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
+class DbusDefinitionRepositoryCommitRequested(DbusNewDomainEvent):
     """
-    D-Bus interface for DefinitionRepositoryPyprojecttomlTemplateCreated.
+    D-Bus interface for DefinitionRepositoryCommitRequested.
 
-    Class name: DbusDefinitionRepositoryPyprojecttomlTemplateCreated
+    Class name: DbusDefinitionRepositoryCommitRequested
 
     Responsibilities:
-        - Define the d-bus interface for the DefinitionRepositoryPyprojecttomlTemplateCreated event.
+        - Define the d-bus interface for the DefinitionRepositoryCommitRequested event.
 
     Collaborators:
         - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
@@ -41,12 +41,12 @@ class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
 
     def __init__(self):
         """
-        Creates a new DbusDefinitionRepositoryPyprojecttomlTemplateCreated.
+        Creates a new DbusDefinitionRepositoryCommitRequested.
         """
         super().__init__()
 
     @signal()
-    def DefinitionRepositoryPyprojecttomlTemplateCreated(
+    def DefinitionRepositoryCommitRequested(
         self,
         org: "s",
         name: "s",
@@ -80,9 +80,9 @@ class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryPyprojecttomlTemplateCreated)
+        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryCommitRequested)
         """
-        return DefinitionRepositoryPyprojecttomlTemplateCreated
+        return DefinitionRepositoryCommitRequested
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

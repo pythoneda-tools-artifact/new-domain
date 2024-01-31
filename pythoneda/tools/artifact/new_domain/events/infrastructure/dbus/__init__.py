@@ -24,12 +24,30 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 DBUS_PATH = "/pythoneda/tools/artifact/new_domain"
 
 from .dbus_new_domain_event import DbusNewDomainEvent
+from .dbus_definition_repository_changes_committed import (
+    DbusDefinitionRepositoryChangesCommitted,
+)
 from .dbus_definition_repository_changes_pushed import (
     DbusDefinitionRepositoryChangesPushed,
+)
+from .dbus_definition_repository_changes_tagged import (
+    DbusDefinitionRepositoryChangesTagged,
+)
+from .dbus_definition_repository_cloned import (
+    DbusDefinitionRepositoryCloned,
+)
+from .dbus_definition_repository_clone_requested import (
+    DbusDefinitionRepositoryCloneRequested,
+)
+from .dbus_definition_repository_commit_requested import (
+    DbusDefinitionRepositoryCommitRequested,
 )
 from .dbus_definition_repository_created import DbusDefinitionRepositoryCreated
 from .dbus_definition_repository_flake_lock_created import (
     DbusDefinitionRepositoryFlakeLockCreated,
+)
+from .dbus_definition_repository_flake_lock_requested import (
+    DbusDefinitionRepositoryFlakeLockRequested,
 )
 from .dbus_definition_repository_nix_flake_created import (
     DbusDefinitionRepositoryNixFlakeCreated,
@@ -43,6 +61,9 @@ from .dbus_definition_repository_pyprojecttoml_template_created import (
 from .dbus_definition_repository_pyprojecttoml_template_requested import (
     DbusDefinitionRepositoryPyprojecttomlTemplateRequested,
 )
+from .dbus_definition_repository_push_requested import (
+    DbusDefinitionRepositoryPushRequested,
+)
 from .dbus_definition_repository_readme_created import (
     DbusDefinitionRepositoryReadmeCreated,
 )
@@ -50,7 +71,17 @@ from .dbus_definition_repository_readme_requested import (
     DbusDefinitionRepositoryReadmeRequested,
 )
 from .dbus_definition_repository_requested import DbusDefinitionRepositoryRequested
+from .dbus_definition_repository_tag_requested import (
+    DbusDefinitionRepositoryTagRequested,
+)
+from .dbus_domain_repository_changes_committed import (
+    DbusDomainRepositoryChangesCommitted,
+)
 from .dbus_domain_repository_changes_pushed import DbusDomainRepositoryChangesPushed
+from .dbus_domain_repository_changes_tagged import DbusDomainRepositoryChangesTagged
+from .dbus_domain_repository_cloned import DbusDomainRepositoryCloned
+from .dbus_domain_repository_clone_requested import DbusDomainRepositoryCloneRequested
+from .dbus_domain_repository_commit_requested import DbusDomainRepositoryCommitRequested
 from .dbus_domain_repository_created import DbusDomainRepositoryCreated
 from .dbus_domain_repository_gitattributes_created import (
     DbusDomainRepositoryGitattributesCreated,
@@ -64,11 +95,19 @@ from .dbus_domain_repository_gitignore_created import (
 from .dbus_domain_repository_gitignore_requested import (
     DbusDomainRepositoryGitignoreRequested,
 )
+from .dbus_domain_repository_push_requested import DbusDomainRepositoryPushRequested
 from .dbus_domain_repository_readme_created import DbusDomainRepositoryReadmeCreated
 from .dbus_domain_repository_readme_requested import DbusDomainRepositoryReadmeRequested
 from .dbus_domain_repository_requested import DbusDomainRepositoryRequested
+from .dbus_domain_repository_tag_requested import DbusDomainRepositoryTagRequested
 from .dbus_new_domain_created import DbusNewDomainCreated
 from .dbus_new_domain_requested import DbusNewDomainRequested
+from .dbus_update_sha256_in_definition_repository_nix_flake_requested import (
+    DbusUpdateSha256InDefinitionRepositoryNixFlakeRequested,
+)
+from .dbus_sha256_in_definition_repository_nix_flake_updated import (
+    DbusSha256InDefinitionRepositoryNixFlakeUpdated,
+)
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et
 # Local Variables:

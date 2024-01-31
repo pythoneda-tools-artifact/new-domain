@@ -1,6 +1,6 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_definition/events/infrastructure/dbus/dbus_definition_repository_readme_created.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_definition_repository_readme_created.py
 
 This file defines the DbusDefinitionRepositoryReadmeCreated class.
 
@@ -80,7 +80,7 @@ class DbusDefinitionRepositoryReadmeCreated(DbusNewDomainEvent):
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_definition.DefinitionRepositoryReadmeCreated)
+        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryReadmeCreated)
         """
         return DefinitionRepositoryReadmeCreated
 

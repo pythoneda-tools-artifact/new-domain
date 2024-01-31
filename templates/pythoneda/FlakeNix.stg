@@ -105,6 +105,7 @@ root(flake) ::= <<
         entrypoint = "<flake.name_in_snake_case>_app";
         description = "<flake.description>";
         license = pkgs.lib.licenses.<flake.license_id>;
+        homepage = "https://github.com/${org}/${repo}";
         maintainers = [ <flake.maintainers: { maintainer | "<maintainer>" }> ];
         archRole = "<flake.arch_role>";
         space = "<flake.pescio_space>";
@@ -246,6 +247,66 @@ root(flake) ::= <<
         };
         defaultApp = apps.default;
         defaultPackage = packages.default;
+        devShells = rec {
+          default = <flake.name>-default;
+          <flake.name>-default = <flake.name>-python311;
+          <flake.name>-python38 = shared.devShell-for {
+            banner = "${
+                pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python38
+              }/bin/banner.sh";
+            extra-namespaces = "";
+            nixpkgs-release = nixpkgsRelease;
+            package = packages.<flake.name>-python38;
+            python = pkgs.python38;
+            pythoneda-shared-banner =
+              pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python38;
+            pythoneda-shared-domain =
+              pythoneda-shared-domain.packages.${system}.pythoneda-shared-domain-python38;
+            inherit archRole layer org pkgs repo space;
+          };
+          <flake.name>-python39 = shared.devShell-for {
+            banner = "${
+                pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python39
+              }/bin/banner.sh";
+            extra-namespaces = "";
+            nixpkgs-release = nixpkgsRelease;
+            package = packages.<flake.name>-python39;
+            python = pkgs.python39;
+            pythoneda-shared-banner =
+              pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python39;
+            pythoneda-shared-domain =
+              pythoneda-shared-domain.packages.${system}.pythoneda-shared-domain-python39;
+            inherit archRole layer org pkgs repo space;
+          };
+          <flake.name>-python310 = shared.devShell-for {
+            banner = "${
+                pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python310
+              }/bin/banner.sh";
+            extra-namespaces = "";
+            nixpkgs-release = nixpkgsRelease;
+            package = packages.<flake.name>-python310;
+            python = pkgs.python310;
+            pythoneda-shared-banner =
+              pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python310;
+            pythoneda-shared-domain =
+              pythoneda-shared-domain.packages.${system}.pythoneda-shared-domain-python310;
+            inherit archRole layer org pkgs repo space;
+          };
+          <flake.name>-python311 = shared.devShell-for {
+            banner = "${
+                pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python311
+              }/bin/banner.sh";
+            extra-namespaces = "";
+            nixpkgs-release = nixpkgsRelease;
+            package = packages.<flake.name>-python311;
+            python = pkgs.python311;
+            pythoneda-shared-banner =
+              pythoneda-shared-banner.packages.${system}.pythoneda-shared-banner-python311;
+            pythoneda-shared-domain =
+              pythoneda-shared-domain.packages.${system}.pythoneda-shared-domain-python311;
+            inherit archRole layer org pkgs repo space;
+          };
+        };
         packages = rec {
           default = <flake.name>-default;
           <flake.name>-default = <flake.name>-python311;

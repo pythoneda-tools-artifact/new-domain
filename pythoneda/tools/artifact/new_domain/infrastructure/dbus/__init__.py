@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
+from .signals import Signals
 from .new_domain_dbus_signal_emitter import NewDomainDbusSignalEmitter
 from .new_domain_dbus_signal_listener import NewDomainDbusSignalListener
 

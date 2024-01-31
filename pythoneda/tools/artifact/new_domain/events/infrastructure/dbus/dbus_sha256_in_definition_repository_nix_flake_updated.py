@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8
 """
-pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_definition_repository_pyprojecttoml_template_created.py
+pythoneda/tools/artifact/new_domain/events/infrastructure/dbus/dbus_sha256_in_definition_repository_nix_flake_updated.py
 
-This file defines the DbusDefinitionRepositoryPyprojecttomlTemplateCreated class.
+This file defines the DbusSha256InDefinitionRepositoryNixFlakeUpdated class.
 
 Copyright (C) 2024-today rydnr's pythoneda-tools-artifact/new-domain
 
@@ -21,19 +21,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .dbus_new_domain_event import DbusNewDomainEvent
 from dbus_next.service import signal
-from pythoneda.tools.artifact.new_domain.events import (
-    DefinitionRepositoryPyprojecttomlTemplateCreated,
-)
+from pythoneda.tools.artifact.new_domain.events import DefinitionRepositoryCreated
 
 
-class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
+class DbusSha256InDefinitionRepositoryNixFlakeUpdated(DbusNewDomainEvent):
     """
-    D-Bus interface for DefinitionRepositoryPyprojecttomlTemplateCreated.
+    D-Bus interface for DefinitionRepositoryCreated.
 
-    Class name: DbusDefinitionRepositoryPyprojecttomlTemplateCreated
+    Class name: DbusSha256InDefinitionRepositoryNixFlakeUpdated
 
     Responsibilities:
-        - Define the d-bus interface for the DefinitionRepositoryPyprojecttomlTemplateCreated event.
+        - Define the d-bus interface for the DefinitionRepositoryCreated event.
 
     Collaborators:
         - pythoneda.tools.artifact.new_domain.events.infrastructure.dbus.DbusNewDomainEvent
@@ -41,12 +39,12 @@ class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
 
     def __init__(self):
         """
-        Creates a new DbusDefinitionRepositoryPyprojecttomlTemplateCreated.
+        Creates a new DbusSha256InDefinitionRepositoryNixFlakeUpdated.
         """
         super().__init__()
 
     @signal()
-    def DefinitionRepositoryPyprojecttomlTemplateCreated(
+    def DefinitionRepositoryCreated(
         self,
         org: "s",
         name: "s",
@@ -58,11 +56,11 @@ class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
     ):
         """
         Defines the DefinitionRepositoryCreated d-bus signal.
-        :param org: The name of the organization of the definition repository.
+        :param org: The name of the organization of the domain repository.
         :type org: str
-        :param name: The name of the definition.
+        :param name: The name of the domain.
         :type name: str
-        :param description: A brief description of the definition.
+        :param description: A brief description of the domain.
         :type description: str
         :param package: The Python package.
         :type package: str
@@ -80,9 +78,9 @@ class DbusDefinitionRepositoryPyprojecttomlTemplateCreated(DbusNewDomainEvent):
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryPyprojecttomlTemplateCreated)
+        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryCreated)
         """
-        return DefinitionRepositoryPyprojecttomlTemplateCreated
+        return DefinitionRepositoryCreated
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et
