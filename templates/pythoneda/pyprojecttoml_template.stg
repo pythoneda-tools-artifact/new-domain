@@ -43,7 +43,7 @@ authors = [ @authors@ ]
 packages = [{include = "@package@"}]
 
 [tool.poetry.dependencies]
-python = "^@pythonMajorMinor@"
+python = "^@pythonMajorMinorVersion@"
 <declaring_package_inputs(flake)>
 
 [build-system]
