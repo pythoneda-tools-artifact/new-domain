@@ -76,7 +76,7 @@ class CommitDefinitionRepository(EventListener):
         """
         repo_folder = event.context["def-repo-folder"]
         version = event.context["version"]
-        GitCommit(repo_folder).commit("Initial commit", False)
+        await GitCommit(repo_folder).commit("Initial commit", False)
         return DefinitionRepositoryChangesCommitted(
             event.org,
             event.name,

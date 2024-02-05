@@ -28,7 +28,7 @@ root(definition_readme) ::= <<
 
 ## How to declare it in your flake
 
-Check the latest tag of the artifact repository: <definition_readme.def_url>, and use it instead of the `[version]` placeholder below.
+Check the latest tag of this repository: <definition_readme.def_url>, and use it instead of the `[version]` placeholder below.
 
 ```nix
 {

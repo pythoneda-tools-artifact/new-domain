@@ -57,8 +57,8 @@ class PushRepository(EventListener, abc.ABC):
         :type remote: str
         """
         git_push = GitPush(repoFolder)
-        git_push.push_branch(branch, remote)
-        git_push.push_tags()
+        await git_push.push_branch(branch, remote)
+        await git_push.push_tags()
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

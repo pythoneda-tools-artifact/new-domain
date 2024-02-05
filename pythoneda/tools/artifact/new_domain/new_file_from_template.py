@@ -158,7 +158,7 @@ class NewFileFromTemplate(Entity):
         """
         return self._root_template
 
-    def generate(self, outputFolder: str) -> str:
+    async def generate(self, outputFolder: str) -> str:
         """
         Generates the file from a template.
         :param outputFolder: The output folder.
@@ -166,7 +166,7 @@ class NewFileFromTemplate(Entity):
         :return: The generated file.
         :rtype: str
         """
-        self.process_template(
+        await self.process_template(
             outputFolder,
             self.template_name,
             self.template_group,
@@ -176,7 +176,7 @@ class NewFileFromTemplate(Entity):
         )
         return Path(outputFolder) / self.output_file
 
-    def process_template(
+    async def process_template(
         self,
         outputFolder: str,
         templateName: str,

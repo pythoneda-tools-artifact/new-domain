@@ -76,7 +76,7 @@ class TagDomainRepository(EventListener):
         """
         repo_folder = event.context["repo-folder"]
         version = event.context["version"]
-        GitTag(repo_folder).tag(version, "Initial tag")
+        await GitTag(repo_folder).tag(version, "Initial tag")
         return DomainRepositoryChangesTagged(
             event.org,
             event.name,

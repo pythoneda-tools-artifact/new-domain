@@ -77,8 +77,8 @@ class CreateDomainRepositoryGitignore(EventListener):
         """
         gitignore = Gitignore()
         repo_folder = event.context["repo-folder"]
-        gitignore_file = gitignore.generate(repo_folder)
-        GitAdd(repo_folder).add(gitignore_file)
+        gitignore_file = await gitignore.generate(repo_folder)
+        await GitAdd(repo_folder).add(gitignore_file)
         return DomainRepositoryGitignoreCreated(
             event.org,
             event.name,

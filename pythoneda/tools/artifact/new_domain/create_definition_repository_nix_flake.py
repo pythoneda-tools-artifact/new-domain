@@ -85,8 +85,8 @@ class CreateDefinitionRepositoryNixFlake(EventListener):
         )
         event.context["flake"] = flake
         repo_folder = event.context["def-repo-folder"]
-        flake_file = flake.generate_flake(repo_folder)
-        GitAdd(repo_folder).add(flake_file)
+        flake_file = await flake.generate_flake(repo_folder)
+        await GitAdd(repo_folder).add(flake_file)
         return DefinitionRepositoryNixFlakeCreated(
             event.org,
             event.name,

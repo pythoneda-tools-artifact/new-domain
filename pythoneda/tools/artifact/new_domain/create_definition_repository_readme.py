@@ -85,8 +85,8 @@ class CreateDefinitionRepositoryReadme(EventListener):
             event.context["def-url"],
         )
         repo_folder = event.context["def-repo-folder"]
-        readme_file = readme.generate(repo_folder)
-        GitAdd(repo_folder).add(readme_file)
+        readme_file = await readme.generate(repo_folder)
+        await GitAdd(repo_folder).add(readme_file)
         return DefinitionRepositoryReadmeCreated(
             event.org,
             event.name,

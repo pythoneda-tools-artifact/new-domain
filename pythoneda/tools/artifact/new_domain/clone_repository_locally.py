@@ -65,7 +65,7 @@ class CloneRepositoryLocally(EventListener, abc.ABC):
         """
         temp_dir = tempfile.mkdtemp()
         atexit.register(lambda: cleanup_temp_dir(temp_dir))
-        repo = GitClone(temp_dir).clone(url, name)
+        repo = await GitClone(temp_dir).clone(url, name)
         return os.path.join(temp_dir, name)
 
 

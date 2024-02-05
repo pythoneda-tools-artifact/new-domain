@@ -76,7 +76,7 @@ class CreateDefinitionRepositoryFlakeLock(EventListener):
         """
         repo_folder = event.context["def-repo-folder"]
         await NixFlake.update_flake_lock(repo_folder)
-        GitAdd(repo_folder).add("flake.lock")
+        await GitAdd(repo_folder).add("flake.lock")
         return DefinitionRepositoryFlakeLockCreated(
             event.org,
             event.name,

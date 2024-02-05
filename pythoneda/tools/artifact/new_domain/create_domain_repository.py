@@ -76,17 +76,20 @@ class CreateDomainRepository(EventListener):
         """
         r = Repository(event.github_token)
         response = await r.create(event.org, event.name)
-        return (
-            DomainRepositoryCreated(
-                event.org,
-                event.name,
-                event.description,
-                event.package,
-                event.github_token,
-                event.gpg_key_id,
-                event.context,
-            ),
-        )
+        if response.get("__error__"):
+            CreateDomainRepository.logger().error(response)
+        else:
+            return (
+                DomainRepositoryCreated(
+                    event.org,
+                    event.name,
+                    event.description,
+                    event.package,
+                    event.github_token,
+                    event.gpg_key_id,
+                    event.context,
+                ),
+            )
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

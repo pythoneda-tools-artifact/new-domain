@@ -81,8 +81,8 @@ class CreateDomainRepositoryGitattributes(EventListener):
         )
         print(f'def-url: {event.context["def-url"]} -> {gitattributes}')
         repo_folder = event.context["repo-folder"]
-        gitattributes_file = gitattributes.generate(repo_folder)
-        GitAdd(repo_folder).add(gitattributes_file)
+        gitattributes_file = await gitattributes.generate(repo_folder)
+        await GitAdd(repo_folder).add(gitattributes_file)
         return DomainRepositoryGitattributesCreated(
             event.org,
             event.name,

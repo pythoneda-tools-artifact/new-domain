@@ -81,7 +81,7 @@ class UpdateSha256InDefinitionRepositoryNixFlake(EventListener):
         repo_folder = event.context["def-repo-folder"]
         sha256 = await NixFlake.fetch_sha256(url, version)
         await NixFlake.update_sha256(sha256, repo_folder)
-        GitAdd(repo_folder).add("flake.nix")
+        await GitAdd(repo_folder).add("flake.nix")
         return Sha256InDefinitionRepositoryNixFlakeUpdated(
             event.org,
             event.name,

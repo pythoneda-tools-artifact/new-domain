@@ -76,7 +76,7 @@ class TagDefinitionRepository(EventListener):
         """
         repo_folder = event.context["def-repo-folder"]
         version = event.context["version"]
-        GitTag(repo_folder).tag(version, f"tag for {version}")
+        await GitTag(repo_folder).tag(version, f"tag for {version}")
         return DefinitionRepositoryChangesTagged(
             event.org,
             event.name,

@@ -20,16 +20,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import abc
-from dbus_next import Message
-from dbus_next.service import ServiceInterface, signal
+from dbus_next import BusType, Message
+from dbus_next.service import signal
 import json
-from pythoneda.shared import BaseObject
+from pythoneda.shared.infrastructure.dbus import DbusEvent
 from pythoneda.tools.artifact.new_domain.events import NewDomainEvent
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
 from typing import List
 
 
-class DbusNewDomainEvent(BaseObject, ServiceInterface, abc.ABC):
+class DbusNewDomainEvent(DbusEvent, abc.ABC):
     """
     Abstract class for D-Bus interfaces of new-domain events.
 
@@ -46,18 +46,7 @@ class DbusNewDomainEvent(BaseObject, ServiceInterface, abc.ABC):
         """
         Creates a new DbusNewDomainEvent.
         """
-        super().__init__(
-            f"Pythoneda_Tools_Artifact_NewDomain_Events_{self.__class__.name}"
-        )
-
-    @classmethod
-    def path(cls) -> str:
-        """
-        Retrieves the d-bus path.
-        :return: Such value.
-        :rtype: str
-        """
-        return DBUS_PATH
+        super().__init__(DBUS_PATH, BusType.SYSTEM)
 
     @classmethod
     def transform(cls, event: NewDomainEvent) -> List[str]:
@@ -90,16 +79,6 @@ class DbusNewDomainEvent(BaseObject, ServiceInterface, abc.ABC):
         :rtype: str
         """
         return "sssssss"
-
-    @classmethod
-    @abc.abstractmethod
-    def event_class(cls):
-        """
-        Retrieves the specific event class.
-        :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.NewDomainEvent)
-        """
-        pass
 
     @classmethod
     def parse(cls, message: Message) -> NewDomainEvent:

@@ -79,8 +79,8 @@ class CreateDefinitionRepositoryPyprojecttomlTemplate(EventListener):
             event.context["flake"],
         )
         repo_folder = event.context["def-repo-folder"]
-        pyprojecttoml_template_file = pyprojecttoml_template.generate(repo_folder)
-        GitAdd(repo_folder).add(pyprojecttoml_template_file)
+        pyprojecttoml_template_file = await pyprojecttoml_template.generate(repo_folder)
+        await GitAdd(repo_folder).add(pyprojecttoml_template_file)
         return DefinitionRepositoryPyprojecttomlTemplateCreated(
             event.org,
             event.name,

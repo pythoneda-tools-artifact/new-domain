@@ -85,8 +85,8 @@ class CreateDomainRepositoryReadme(EventListener):
             event.context["def-url"],
         )
         repo_folder = event.context["repo-folder"]
-        readme_file = readme.generate(repo_folder)
-        GitAdd(repo_folder).add(readme_file)
+        readme_file = await readme.generate(repo_folder)
+        await GitAdd(repo_folder).add(readme_file)
         return DomainRepositoryReadmeCreated(
             event.org,
             event.name,

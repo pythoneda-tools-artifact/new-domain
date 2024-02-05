@@ -93,14 +93,14 @@ class CreateDomainRepositoryInitFiles(EventListener):
                 relative_folder = subfolder
             else:
                 relative_folder = f"{relative_folder}/{subfolder}"
-            init_file = Init(
+            init_file = await Init(
                 event.org,
                 event.name,
                 relative_package,
                 relative_folder,
                 datetime.datetime.now().year,
             ).generate(current_folder)
-            GitAdd(repo_folder).add(init_file)
+            await GitAdd(repo_folder).add(init_file)
         return DomainRepositoryInitFilesCreated(
             event.org,
             event.name,

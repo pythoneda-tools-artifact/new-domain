@@ -76,7 +76,7 @@ class CommitDomainRepository(EventListener):
         """
         repo_folder = event.context["repo-folder"]
         version = event.context["version"]
-        GitCommit(repo_folder).commit("Initial commit", False)
+        await GitCommit(repo_folder).commit("Initial commit", False)
         return DomainRepositoryChangesCommitted(
             event.org,
             event.name,

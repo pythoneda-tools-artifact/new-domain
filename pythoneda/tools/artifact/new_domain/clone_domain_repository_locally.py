@@ -75,7 +75,7 @@ class CloneDomainRepositoryLocally(CloneRepositoryLocally):
         :rtype: pythoneda.tools.artifact.new_domain.events.DomainRepositoryCloned
         """
         repo_folder = await cls.clone(event.context["url"], event.name)
-        GitBranch(repo_folder).branch("main")
+        await GitBranch(repo_folder).branch("main")
         event.context["repo-folder"] = repo_folder
         return DomainRepositoryCloned(
             event.org,
