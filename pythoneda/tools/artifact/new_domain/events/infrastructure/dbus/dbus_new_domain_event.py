@@ -62,7 +62,7 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             event.name,
             event.description,
             event.package,
-            event.github_token,
+            event.github_token.get(),
             event.gpg_key_id,
             json.dumps(event.context),
             event.id,
@@ -78,7 +78,7 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
         :return: The signature.
         :rtype: str
         """
-        return "sssssss"
+        return "sssssssss"
 
     @classmethod
     def parse(cls, message: Message) -> NewDomainEvent:

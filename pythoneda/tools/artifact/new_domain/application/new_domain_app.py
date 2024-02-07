@@ -25,13 +25,17 @@ from pythoneda.tools.artifact.new_domain.events import NewDomainRequested
 from pythoneda.tools.artifact.new_domain.infrastructure.cli import (
     NewDomainOptionsCli,
 )
-from pythoneda.tools.artifact.new_domain.infrastructure.dbus import (
-    NewDomainDbusSignalEmitter,
-)
+from pythoneda.shared.infrastructure.dbus import DbusSignalEmitter, DbusSignalListener
 from typing import Dict
 
 
 @enable(NewDomainOptionsCli)
+@enable(
+    DbusSignalEmitter("pythoneda.tools.artifact.new_domain.events.infrastructure.dbus")
+)
+@enable(
+    DbusSignalListener("pythoneda.tools.artifact.new_domain.events.infrastructure.dbus")
+)
 class NewDomainApp(PythonEDA):
     """
     Runs the NewDomainApp PythonEDA app.

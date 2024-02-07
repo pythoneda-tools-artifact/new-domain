@@ -21,12 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .dbus_new_domain_event import DbusNewDomainEvent
 from dbus_next.service import signal
-from pythoneda.tools.artifact.new_domain.events import DefinitionRepositoryCreated
+from pythoneda.tools.artifact.new_domain.events import (
+    Sha256InDefinitionRepositoryNixFlakeUpdated,
+)
 
 
 class DbusSha256InDefinitionRepositoryNixFlakeUpdated(DbusNewDomainEvent):
     """
-    D-Bus interface for DefinitionRepositoryCreated.
+    D-Bus interface for Sha256InDefinitionRepositoryNixFlakeUpdated.
 
     Class name: DbusSha256InDefinitionRepositoryNixFlakeUpdated
 
@@ -44,7 +46,7 @@ class DbusSha256InDefinitionRepositoryNixFlakeUpdated(DbusNewDomainEvent):
         super().__init__()
 
     @signal()
-    def DefinitionRepositoryCreated(
+    def Sha256InDefinitionRepositoryNixFlakeUpdated(
         self,
         org: "s",
         name: "s",
@@ -55,7 +57,7 @@ class DbusSha256InDefinitionRepositoryNixFlakeUpdated(DbusNewDomainEvent):
         context: "s",
     ):
         """
-        Defines the DefinitionRepositoryCreated d-bus signal.
+        Defines the Sha256InDefinitionRepositoryNixFlakeUpdated d-bus signal.
         :param org: The name of the organization of the domain repository.
         :type org: str
         :param name: The name of the domain.
@@ -78,9 +80,9 @@ class DbusSha256InDefinitionRepositoryNixFlakeUpdated(DbusNewDomainEvent):
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryCreated)
+        :rtype: type(pythoneda.tools.artifact.new_domain.events.Sha256InDefinitionRepositoryNixFlakeUpdated)
         """
-        return DefinitionRepositoryCreated
+        return Sha256InDefinitionRepositoryNixFlakeUpdated
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et
