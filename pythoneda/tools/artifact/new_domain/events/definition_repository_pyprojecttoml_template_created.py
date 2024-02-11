@@ -19,6 +19,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from .definition_repository_flake_lock_requested import (
+    DefinitionRepositoryFlakeLockRequested,
+)
 from .new_domain_event import NewDomainEvent
 from typing import Dict, List
 
@@ -85,6 +88,24 @@ class DefinitionRepositoryPyprojecttomlTemplateCreated(NewDomainEvent):
             reconstructedId,
             reconstructedPreviousEventIds,
         )
+
+    async def maybe_trigger(self) -> List[DefinitionRepositoryFlakeLockRequested]:
+        """
+        Triggers new events.
+        :return: The triggered events.
+        :rtype: List[pythoneda.tools.artifact.new_domain.events.DefinitionRepositoryFlakeLockRequested]
+        """
+        return [
+            DefinitionRepositoryFlakeLockRequested(
+                self.org,
+                self.name,
+                self.description,
+                self.package,
+                self.github_token,
+                self.gpg_key_id,
+                self.context,
+            ),
+        ]
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

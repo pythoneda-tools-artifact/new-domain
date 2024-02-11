@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from .new_domain_created import NewDomainCreated
 from .new_domain_event import NewDomainEvent
 from typing import Dict, List
 
@@ -85,6 +86,24 @@ class DefinitionRepositoryChangesPushed(NewDomainEvent):
             reconstructedId,
             reconstructedPreviousEventIds,
         )
+
+    async def maybe_trigger(self) -> List[NewDomainCreated]:
+        """
+        Triggers new events.
+        :return: The triggered events.
+        :rtype: List[pythoneda.tools.artifact.new_domain.events.NewDomainCreated]
+        """
+        return [
+            NewDomainCreated(
+                self.org,
+                self.name,
+                self.description,
+                self.package,
+                self.github_token,
+                self.gpg_key_id,
+                self.context,
+            ),
+        ]
 
 
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et

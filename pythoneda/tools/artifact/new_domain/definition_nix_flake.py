@@ -73,12 +73,12 @@ class DefinitionNixFlake(PythonedaNixFlake):
         super().__init__(
             name,
             version,
-            lambda v: self.__class__.url_for(url, v),
+            f"{url}/{{version}}",
             [
-                FlakeUtilsNixFlake("v1.0.0"),
-                NixosNixFlake("23.11"),
-                PythonedaSharedBannerNixFlake("0.0.47"),
-                PythonedaSharedDomainNixFlake("0.0.30"),
+                FlakeUtilsNixFlake.default(),
+                NixosNixFlake.default(),
+                PythonedaSharedBannerNixFlake.default(),
+                PythonedaSharedDomainNixFlake.default(),
             ],
             description,
             url,
@@ -89,19 +89,6 @@ class DefinitionNixFlake(PythonedaNixFlake):
         )
         self._org = org
         self._package = package
-
-    @classmethod
-    def url_for(cls, url: str, version: str) -> str:
-        """
-        Retrieves the final url, including the version.
-        :param url: The original url.
-        :type url: str
-        :param version: The version.
-        :type version: str
-        :return: The final url.
-        :rtype: str
-        """
-        return lambda: f"{url}/{version}"
 
     @property
     @attribute

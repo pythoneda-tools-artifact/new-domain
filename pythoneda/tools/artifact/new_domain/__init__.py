@@ -32,6 +32,7 @@ from .new_file_from_template import NewFileFromTemplate
 from .gitattributes import Gitattributes
 from .gitignore import Gitignore
 from .readme import Readme
+from .definition_nix_flake import DefinitionNixFlake
 from .definition_readme import DefinitionReadme
 from .domain_readme import DomainReadme
 from .new_domain import NewDomain

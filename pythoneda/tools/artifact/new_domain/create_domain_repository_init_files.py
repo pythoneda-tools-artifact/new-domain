@@ -84,7 +84,11 @@ class CreateDomainRepositoryInitFiles(EventListener):
         subfolders = event.package.split(".")
         for subfolder in subfolders:
             current_folder = os.path.join(current_folder, subfolder)
-            os.mkdir(current_folder)
+            if os.path.exists(current_folder):
+                if not os.path.isdir(current_folder):
+                    os.delete(current_folder)
+            else:
+                os.mkdir(current_folder)
             if relative_package is None:
                 relative_package = subfolder
             else:
