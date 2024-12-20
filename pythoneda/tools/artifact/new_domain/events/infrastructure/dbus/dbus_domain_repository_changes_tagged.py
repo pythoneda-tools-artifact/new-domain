@@ -69,7 +69,7 @@ class DbusDomainRepositoryChangesTagged(DbusNewDomainEvent):
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
         :param context: A dictionary with additional values.
-        :param context: Dict
+        :type context: Dict
         """
         pass
 

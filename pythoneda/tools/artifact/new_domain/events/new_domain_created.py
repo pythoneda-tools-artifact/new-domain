@@ -44,9 +44,8 @@ class NewDomainCreated(NewDomainEvent):
         package: str,
         githubToken: str,
         gpgKeyId: str,
-        previousEventId: str = None,
+        previousEventIds: List[str] = None,
         reconstructedId: str = None,
-        reconstructedPreviousEventIds: List[str] = None,
     ):
         """
         Creates a new NewDomainCreated instance.
@@ -62,17 +61,10 @@ class NewDomainCreated(NewDomainEvent):
         :type githubToken: str
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
-        :param url: The url of the new domain.
-        :type url: str
-        :param defUrl: The url of the definition repository of the new domain.
-        :type defUrl: str
-        :param previousEventId: The id of the previous event, if any.
-        :type previousEventId: str
+        :param previousEventIds: The id of the previous events.
+        :type previousEventIds: List[str]
         :param reconstructedId: The id of the event, if it's generated externally.
         :type reconstructedId: str
-        :param reconstructedPreviousEventIds: The id of the previous events, if an external event
-        is being reconstructed.
-        :type reconstructedPreviousEventIds: List[str]
         """
         super().__init__(
             org,
@@ -82,9 +74,8 @@ class NewDomainCreated(NewDomainEvent):
             githubToken,
             gpgKeyId,
             {},
-            previousEventId,
+            previousEventIds,
             reconstructedId,
-            reconstructedPreviousEventIds,
         )
 
 

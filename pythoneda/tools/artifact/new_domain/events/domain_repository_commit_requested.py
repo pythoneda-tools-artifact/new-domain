@@ -45,9 +45,8 @@ class DomainRepositoryCommitRequested(NewDomainEvent):
         githubToken: str,
         gpgKeyId: str,
         context: Dict = None,
-        previousEventId: str = None,
+        previousEventIds: List[str] = None,
         reconstructedId: str = None,
-        reconstructedPreviousEventIds: List[str] = None,
     ):
         """
         Creates a new DomainRepositoryCommitRequested instance.
@@ -64,14 +63,11 @@ class DomainRepositoryCommitRequested(NewDomainEvent):
         :param gpgKeyId: The GnuPG key id.
         :type gpgKeyId: str
         :param context: A dictionary with additional values.
-        :param context: Dict
-        :param previousEventId: The id of the previous event, if any.
-        :type previousEventId: str
+        :type context: Dict
+        :param previousEventIds: The id of the previous events.
+        :type previousEventIds: List[str]
         :param reconstructedId: The id of the event, if it's generated externally.
         :type reconstructedId: str
-        :param reconstructedPreviousEventIds: The id of the previous events, if an external event
-        is being reconstructed.
-        :type reconstructedPreviousEventIds: List[str]
         """
         super().__init__(
             org,
@@ -81,9 +77,8 @@ class DomainRepositoryCommitRequested(NewDomainEvent):
             githubToken,
             gpgKeyId,
             context,
-            previousEventId,
+            previousEventIds,
             reconstructedId,
-            reconstructedPreviousEventIds,
         )
 
 

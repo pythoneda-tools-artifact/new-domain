@@ -65,8 +65,8 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             event.github_token.get(),
             event.gpg_key_id,
             json.dumps(event.context),
-            event.id,
             json.dumps(event.previous_event_ids),
+            event.id,
         ]
 
     @classmethod
@@ -97,8 +97,8 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             githubToken,
             gpgKeyId,
             context,
-            event_id,
             prev_event_ids,
+            event_id,
         ) = message.body
         return cls.event_class(
             org,
@@ -108,9 +108,8 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             githubToken,
             gpgKeyId,
             json.loads(context),
-            None,
-            event_id,
             json.loads(prev_event_ids),
+            event_id,
         )
 
 
