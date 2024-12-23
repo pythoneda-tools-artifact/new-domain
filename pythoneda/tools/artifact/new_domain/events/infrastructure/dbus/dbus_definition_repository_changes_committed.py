@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from .dbus_new_domain_event import DbusNewDomainEvent
 from dbus_next.service import signal
+from pythoneda.shared import Event
 from pythoneda.tools.artifact.new_domain.events import (
     DefinitionRepositoryChangesCommitted,
 )
@@ -76,11 +77,11 @@ class DbusDefinitionRepositoryChangesCommitted(DbusNewDomainEvent):
         pass
 
     @classmethod
-    def event_class(cls):
+    def event_class(cls) -> Type[Event]:
         """
         Retrieves the specific event class.
         :return: Such class.
-        :rtype: type(pythoneda.tools.artifact.new_domain.DefinitionRepositoryChangesCommitted)
+        :rtype: Type[Event]
         """
         return DefinitionRepositoryChangesCommitted
 
