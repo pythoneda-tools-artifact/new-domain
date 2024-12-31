@@ -77,6 +77,16 @@ class DbusUpdateSha256InDefinitionRepositoryNixFlakeRequested(DbusNewDomainEvent
         pass
 
     @classmethod
+    @property
+    def name(cls) -> str:
+        """
+        Retrieves the d-bus interface name.
+        :return: Such value.
+        :rtype: str
+        """
+        return "Pythoneda_Tools_Artifact_NewDomain_UpdateSha256InDefinitionRepositoryNixFlakeRequested"
+
+    @classmethod
     def event_class(cls) -> Type[UpdateSha256InDefinitionRepositoryNixFlakeRequested]:
         """
         Retrieves the specific event class.

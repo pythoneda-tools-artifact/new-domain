@@ -20,9 +20,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import abc
-from dbus_next import BusType, Message
+from dbus_next import Message
 from dbus_next.service import signal
 import json
+from pythoneda.shared import Invariants
 from pythoneda.shared.infrastructure.dbus import DbusEvent
 from pythoneda.tools.artifact.new_domain.events import NewDomainEvent
 from pythoneda.tools.artifact.new_domain.events.infrastructure.dbus import DBUS_PATH
@@ -46,7 +47,7 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
         """
         Creates a new DbusNewDomainEvent.
         """
-        super().__init__(DBUS_PATH, BusType.SYSTEM)
+        super().__init__(DBUS_PATH)
 
     @classmethod
     def transform(cls, event: NewDomainEvent) -> List[str]:
@@ -66,6 +67,7 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             event.gpg_key_id,
             json.dumps(event.context),
             json.dumps(event.previous_event_ids),
+            Invariants.instance().to_json(event),
             event.id,
         ]
 
@@ -78,7 +80,7 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
         :return: The signature.
         :rtype: str
         """
-        return "sssssssss"
+        return "ssssssssss"
 
     @classmethod
     def parse(cls, message: Message) -> NewDomainEvent:
@@ -98,18 +100,22 @@ class DbusNewDomainEvent(DbusEvent, abc.ABC):
             gpgKeyId,
             context,
             prev_event_ids,
+            invariants,
             event_id,
         ) = message.body
-        return cls.event_class(
-            org,
-            name,
-            description,
-            package,
-            githubToken,
-            gpgKeyId,
-            json.loads(context),
-            json.loads(prev_event_ids),
-            event_id,
+        return (
+            invariants,
+            cls.event_class(
+                org,
+                name,
+                description,
+                package,
+                githubToken,
+                gpgKeyId,
+                json.loads(context),
+                json.loads(prev_event_ids),
+                event_id,
+            ),
         )
 
 

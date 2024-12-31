@@ -74,6 +74,16 @@ class DbusDefinitionRepositoryCloned(DbusNewDomainEvent):
         pass
 
     @classmethod
+    @property
+    def name(cls) -> str:
+        """
+        Retrieves the d-bus interface name.
+        :return: Such value.
+        :rtype: str
+        """
+        return "Pythoneda_Tools_Artifact_NewDomain_DefinitionRepositoryCloned"
+
+    @classmethod
     def event_class(cls):
         """
         Retrieves the specific event class.

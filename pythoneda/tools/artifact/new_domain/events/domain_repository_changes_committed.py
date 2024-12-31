@@ -98,6 +98,7 @@ class DomainRepositoryChangesCommitted(NewDomainEvent):
                 self.github_token,
                 self.gpg_key_id,
                 self.context,
+                [self.id] + self.previous_event_ids,
             ),
         ]
 
