@@ -69,7 +69,6 @@ class NewDomainEvent(Event):
         :param reconstructedId: The id of the event, if it's generated externally.
         :type reconstructedId: str
         """
-        super().__init__(previousEventIds, reconstructedId)
         self._org = org
         self._name = name
         self._description = description
@@ -80,6 +79,7 @@ class NewDomainEvent(Event):
             self._context = context
         else:
             self._context = {}
+        super().__init__(previousEventIds, reconstructedId)
 
     @property
     @attribute
