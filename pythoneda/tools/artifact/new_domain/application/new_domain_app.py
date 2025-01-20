@@ -82,11 +82,7 @@ class NewDomainApp(PythonEDA):
 
 
 if __name__ == "__main__":
-    asyncio.run(
-        NewDomainApp.main(
-            "pythoneda.tools.artifact.new_domain.application.NewDomainApp"
-        )
-    )
+    asyncio.run(NewDomainApp.main())
 # vim: syntax=python ts=4 sw=4 sts=4 tw=79 sr et
 # Local Variables:
 # mode: python
