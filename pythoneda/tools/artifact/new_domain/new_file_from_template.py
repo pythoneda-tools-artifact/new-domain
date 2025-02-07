@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import os
 from pathlib import Path
-from pythoneda.shared import attribute, Entity
+from pythoneda.shared import attribute, Entity, EventReference
 from stringtemplate3 import PathGroupLoader, StringTemplateGroup
 from typing import Dict
 
@@ -47,6 +47,7 @@ class NewFileFromTemplate(Entity):
         outputFile: str,
         rootTemplate: str = "root",
         templateSubfolder: str = "pythoneda",
+        eventHistory: List[EventReference] = [],
     ):
         """
         Creates a new NewFileFromTemplate instance.
@@ -62,14 +63,16 @@ class NewFileFromTemplate(Entity):
         :type rootTemplate: str
         :param templateSubfolder: The template subfolder, if any.
         :type templateSubfolder: str
+        :param eventHistory: The event history.
+        :type eventHistory: List[pythoneda.shared.EventReference]
         """
-        super().__init__()
         self._vars = vars
         self._template_name = templateName
         self._template_group = templateGroup
         self._output_file = outputFile
         self._root_template = rootTemplate
         self._template_subfolder = templateSubfolder
+        super().__init__(eventHistory=eventHistory)
 
     @property
     @attribute
